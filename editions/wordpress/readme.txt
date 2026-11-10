@@ -4,7 +4,7 @@ Tags: video conference, webrtc, meetings, video chat
 Requires at least: 6.9
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 0.2.1
+Stable tag: 0.2.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -55,6 +55,11 @@ Yes, after an operator reviews and enables the additive /conference namespace. E
 No. Settings and meetings are retained on deactivation and deletion. Remove them deliberately through WordPress before deleting the plugin if desired.
 
 == Changelog ==
+
+= 0.2.3 =
+* Center the entry form and prioritize your name, media choice, consent and Join meeting.
+* Move invitations below Join meeting and remove the oversized inactive camera placeholder.
+* Keep entry controls readable and accessible on narrow screens; support Enter to join.
 
 = 0.2.1 =
 * Keep shared source/release editions synchronized with the PHP Unicode room-title fix.

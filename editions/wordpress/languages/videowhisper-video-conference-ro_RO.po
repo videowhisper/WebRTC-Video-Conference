@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: videowhisper-video-conference\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/videowhisper-"
 "video-conference\n"
-"POT-Creation-Date: 2026-11-10T17:17:14+00:00\n"
+"POT-Creation-Date: 2026-11-10T18:12:18+00:00\n"
 "PO-Revision-Date: 2026-11-10 16:00+0000\n"
 "Last-Translator: VideoWhisper.com <support@videowhisper.com>\n"
 "Language-Team: Romanian\n"
@@ -57,165 +57,145 @@ msgid "Ask the meeting owner for an invitation link."
 msgstr "Cere organizatorului un link de invitație."
 
 #: includes/labels.php:9
-msgid "Browser permission required"
-msgstr "Este necesară permisiunea browserului"
-
-#: includes/labels.php:10
 msgid ""
 "Camera or microphone unavailable. Allow browser access or join without media."
 msgstr ""
 "Camera sau microfonul nu este disponibil. Permite accesul în browser sau "
 "intră fără cameră și microfon."
 
-#: includes/labels.php:11
-msgid "Camera preview starts when you join."
-msgstr "Previzualizarea camerei începe când intri în întâlnire."
-
-#: includes/labels.php:12
+#: includes/labels.php:10
 msgid "Chat"
 msgstr "Chat"
 
-#: includes/labels.php:13
+#: includes/labels.php:11
 msgid "Close chat"
 msgstr "Închide chatul"
 
-#: includes/labels.php:14
+#: includes/labels.php:12
 msgid "Close invitations"
 msgstr "Închide invitațiile"
 
-#: includes/labels.php:15
+#: includes/labels.php:13
 msgid "Close people"
 msgstr "Închide lista participanților"
 
-#: includes/labels.php:16
+#: includes/labels.php:14
 msgid "Conference error"
 msgstr "Eroare la conferință"
 
-#: includes/labels.php:17
+#: includes/labels.php:15
 msgid "Conference not configured"
 msgstr "Conferința nu este configurată"
 
-#: includes/labels.php:18
-msgid "Connected"
-msgstr "Conectat"
-
-#: includes/labels.php:19
-msgid "Connecting"
-msgstr "Se conectează"
-
-#: includes/labels.php:20
+#: includes/labels.php:16
 msgid "Connection failed. Check your server settings or reload to retry."
 msgstr ""
 "Conectarea a eșuat. Verifică setările serverului sau reîncarcă pagina pentru "
 "a reîncerca."
 
-#: includes/labels.php:21
+#: includes/labels.php:17
 msgid "Copy invitation link"
 msgstr "Copiază linkul de invitație"
 
-#: includes/labels.php:22
+#: includes/labels.php:18
 msgid "Display name"
 msgstr "Nume afișat"
 
-#: includes/labels.php:23
+#: includes/labels.php:19
 msgid "Enter a message of up to 2000 characters."
 msgstr "Introdu un mesaj de cel mult 2000 de caractere."
 
-#: includes/labels.php:24
+#: includes/labels.php:20
 msgid "Gallery"
 msgstr "Galerie"
 
-#: includes/labels.php:25
+#: includes/labels.php:21
 msgid "Guest"
 msgstr "Vizitator"
 
-#: includes/labels.php:26
+#: includes/labels.php:22
 msgid "Hand raised"
 msgstr "Mână ridicată"
 
-#: includes/labels.php:27
+#: includes/labels.php:23
 msgid "Host"
 msgstr "Gazdă"
 
-#: includes/labels.php:28
+#: includes/labels.php:24
 msgid ""
 "I agree to connect to the configured signaling service and share media with "
 "participants when enabled."
 msgstr ""
 
-#: includes/labels.php:29 includes/meetings.php:77
+#: includes/labels.php:25 includes/meetings.php:77
 msgid "Invitation link"
 msgstr "Link de invitație"
 
-#: includes/labels.php:30
+#: includes/labels.php:26
 msgid "Invitation link copied."
 msgstr "Linkul de invitație a fost copiat."
 
-#: includes/labels.php:31
+#: includes/labels.php:27
 msgid "Invitation shared."
 msgstr "Invitația a fost partajată."
 
-#: includes/labels.php:32
+#: includes/labels.php:28
 msgid "Invite"
 msgstr "Invită"
 
-#: includes/labels.php:33
+#: includes/labels.php:29
 msgid "Invite participants"
 msgstr "Invită participanți"
 
-#: includes/labels.php:34
+#: includes/labels.php:30
 msgid "Join meeting"
 msgstr "Intră în întâlnire"
 
-#: includes/labels.php:35
+#: includes/labels.php:31
 msgid "Join the meeting before continuing."
 msgstr "Intră în întâlnire înainte de a continua."
 
-#: includes/labels.php:36
+#: includes/labels.php:32
 msgid "Joining meeting…"
 msgstr "Se intră în întâlnire…"
 
-#: includes/labels.php:37
+#: includes/labels.php:33
 msgid "Leave"
 msgstr "Ieși"
 
-#: includes/labels.php:38
+#: includes/labels.php:34
 msgid "Loading meeting"
 msgstr "Se încarcă întâlnirea"
 
-#: includes/labels.php:39
+#: includes/labels.php:35
 msgid "Lock meeting"
 msgstr "Blochează întâlnirea"
 
-#: includes/labels.php:40
+#: includes/labels.php:36
 msgid "Lower hand"
 msgstr "Coboară mâna"
 
-#: includes/labels.php:41
+#: includes/labels.php:37
 msgid "Media connection failed. Leave and rejoin to retry."
 msgstr "Conexiunea media a eșuat. Ieși și intră din nou pentru a reîncerca."
 
-#: includes/labels.php:42
+#: includes/labels.php:38
 msgid "Media signaling was rejected."
 msgstr "Semnalizarea media a fost refuzată."
 
-#: includes/labels.php:43
+#: includes/labels.php:39
 msgid "Message"
 msgstr "Mesaj"
 
-#: includes/labels.php:44
+#: includes/labels.php:40
 msgid "Mute all guests"
 msgstr "Dezactivează sunetul tuturor vizitatorilor"
 
-#: includes/labels.php:45
+#: includes/labels.php:41
 msgid "Mute microphone"
 msgstr "Dezactivează microfonul"
 
-#: includes/labels.php:46
-msgid "Offline"
-msgstr "Deconectat"
-
-#: includes/labels.php:47
+#: includes/labels.php:42
 msgid ""
 "Open the same invitation in another browser or send it to your participants. "
 "Creating another room starts a separate meeting."
@@ -223,212 +203,208 @@ msgstr ""
 "Deschide aceeași invitație în alt browser sau trimite-o participanților. "
 "Crearea altei camere pornește o întâlnire separată."
 
-#: includes/labels.php:48
+#: includes/labels.php:43
 msgid "Participant"
 msgstr "Participant"
 
-#: includes/labels.php:49
+#: includes/labels.php:44
 msgid "Participants must sign in on this site before joining."
 msgstr ""
 "Participanții trebuie să se autentifice pe acest site înainte de a intra."
 
-#: includes/labels.php:50
+#: includes/labels.php:45
 msgid "People"
 msgstr "Participanți"
 
-#: includes/labels.php:51
+#: includes/labels.php:46
 msgid "Pin"
 msgstr "Fixează"
 
-#: includes/labels.php:52
+#: includes/labels.php:47
 msgid "Preparing VideoWhisper conference configuration."
 msgstr "Se pregătește configurația conferinței VideoWhisper."
 
-#: includes/labels.php:53
+#: includes/labels.php:48
 msgid "Private room · invitation required"
 msgstr "Cameră privată · invitație necesară"
 
-#: includes/labels.php:54
+#: includes/labels.php:49
 msgid "Public room"
 msgstr "Cameră publică"
 
-#: includes/labels.php:55
+#: includes/labels.php:50
 msgid "Publishing this stream is not permitted."
 msgstr "Publicarea acestei transmisii nu este permisă."
 
-#: includes/labels.php:56
+#: includes/labels.php:51
 msgid "Raise hand"
 msgstr "Ridică mâna"
 
-#: includes/labels.php:57
+#: includes/labels.php:52
 msgid "Reconnecting to the meeting…"
 msgstr "Se reconectează la întâlnire…"
 
-#: includes/labels.php:58
+#: includes/labels.php:53
 msgid "Remove"
 msgstr "Elimină"
 
-#: includes/labels.php:59
+#: includes/labels.php:54
 msgid "Request mute"
 msgstr "Solicită dezactivarea microfonului"
 
-#: includes/labels.php:60
+#: includes/labels.php:55
 msgid "Screen"
 msgstr "Ecran"
 
-#: includes/labels.php:61
+#: includes/labels.php:56
 msgid "Screen sharing was cancelled or unavailable."
 msgstr "Partajarea ecranului a fost anulată sau nu este disponibilă."
 
-#: includes/labels.php:62
+#: includes/labels.php:57
 msgid "Select and copy the invitation link below."
 msgstr "Selectează și copiază linkul de invitație de mai jos."
 
-#: includes/labels.php:63
+#: includes/labels.php:58
 msgid "Send message"
 msgstr "Trimite mesajul"
 
-#: includes/labels.php:64
+#: includes/labels.php:59
 msgid "Session ended. Reload the page to rejoin."
 msgstr "Sesiunea s-a încheiat. Reîncarcă pagina pentru a intra din nou."
 
-#: includes/labels.php:65
+#: includes/labels.php:60
 msgid "Share invitation"
 msgstr "Partajează invitația"
 
-#: includes/labels.php:66
+#: includes/labels.php:61
 msgid "Share screen"
 msgstr "Partajează ecranul"
 
-#: includes/labels.php:67
+#: includes/labels.php:62
 msgid "Sharing cancelled. You can copy the link instead."
 msgstr "Partajarea a fost anulată. Poți copia linkul."
 
-#: includes/labels.php:68
+#: includes/labels.php:63
 msgid "Sign-in required"
 msgstr "Autentificare necesară"
 
-#: includes/labels.php:69
-msgid "Small group mesh (up to four participants)"
-msgstr "Grup mic în rețea mesh (cel mult patru participanți)"
-
-#: includes/labels.php:70
+#: includes/labels.php:64
 msgid "Speaker"
 msgstr "Vorbitor"
 
-#: includes/labels.php:71
+#: includes/labels.php:65
 msgid "Spotlight"
 msgstr "Evidențiază"
 
-#: includes/labels.php:72
+#: includes/labels.php:66
 msgid "Start camera"
 msgstr "Pornește camera"
 
-#: includes/labels.php:73
+#: includes/labels.php:67
 msgid "Stop camera"
 msgstr "Oprește camera"
 
-#: includes/labels.php:74
+#: includes/labels.php:68
 msgid "Stop sharing"
 msgstr "Oprește partajarea"
 
-#: includes/labels.php:75
+#: includes/labels.php:69
 msgid "System"
 msgstr "Sistem"
 
-#: includes/labels.php:76
+#: includes/labels.php:70
 msgid "The configured server plan cannot publish this stream."
 msgstr "Planul serverului configurat nu permite publicarea acestei transmisii."
 
-#: includes/labels.php:77
+#: includes/labels.php:71
 msgid "The media signaling request is invalid."
 msgstr "Cererea de semnalizare media nu este validă."
 
-#: includes/labels.php:78
+#: includes/labels.php:72
 msgid "The meeting request is invalid."
 msgstr "Cererea pentru întâlnire nu este validă."
 
-#: includes/labels.php:79
+#: includes/labels.php:73
 msgid "Theme: dark. Switch to system."
 msgstr "Temă: întunecată. Treci la setarea sistemului."
 
-#: includes/labels.php:80
+#: includes/labels.php:74
 msgid "Theme: light. Switch to dark."
 msgstr "Temă: luminoasă. Treci la tema întunecată."
 
-#: includes/labels.php:81
+#: includes/labels.php:75
 msgid "Theme: system. Switch to light."
 msgstr "Temă: sistem. Treci la tema luminoasă."
 
-#: includes/labels.php:82
+#: includes/labels.php:76
 msgid "This action requires a host."
 msgstr "Această acțiune necesită o gazdă."
 
-#: includes/labels.php:83
+#: includes/labels.php:77
 msgid "This browser session is already in the meeting."
 msgstr "Această sesiune de browser este deja în întâlnire."
 
-#: includes/labels.php:84
+#: includes/labels.php:78
 msgid "This meeting is full."
 msgstr "Întâlnirea a atins numărul maxim de participanți."
 
-#: includes/labels.php:85
+#: includes/labels.php:79
 msgid "This meeting is locked."
 msgstr "Întâlnirea este blocată."
 
-#: includes/labels.php:86
+#: includes/labels.php:80
 msgid "This server needs the conference extension."
 msgstr "Acest server necesită extensia pentru conferințe."
 
-#: includes/labels.php:87
+#: includes/labels.php:81
 msgid "Too many requests. Please wait."
 msgstr "Prea multe cereri. Așteaptă puțin."
 
-#: includes/labels.php:88
+#: includes/labels.php:82
 msgid "Unknown status."
 msgstr "Stare necunoscută."
 
-#: includes/labels.php:89
+#: includes/labels.php:83
 msgid "Unlock meeting"
 msgstr "Deblochează întâlnirea"
 
-#: includes/labels.php:90
+#: includes/labels.php:84
 msgid "Unmute microphone"
 msgstr "Activează microfonul"
 
-#: includes/labels.php:91
+#: includes/labels.php:85
 msgid "Use camera and microphone"
 msgstr "Folosește camera și microfonul"
 
-#: includes/labels.php:92
+#: includes/labels.php:86
 msgid "Video meeting"
 msgstr "Întâlnire video"
 
-#: includes/labels.php:93
+#: includes/labels.php:87
 msgid "You cannot join this meeting."
 msgstr "Nu poți intra în această întâlnire."
 
-#: includes/labels.php:94
+#: includes/labels.php:88
 msgid "You were removed from this meeting."
 msgstr "Ai fost eliminat din această întâlnire."
 
-#: includes/labels.php:95
+#: includes/labels.php:89
 msgid "Your hand is raised."
 msgstr "Ai mâna ridicată."
 
-#: includes/labels.php:96
+#: includes/labels.php:90
 msgid "Your screen"
 msgstr "Ecranul tău"
 
-#: includes/labels.php:97
+#: includes/labels.php:91
 msgid "Your session expired. Reload the page to rejoin."
 msgstr "Sesiunea ta a expirat. Reîncarcă pagina pentru a intra din nou."
 
-#: includes/labels.php:98
+#: includes/labels.php:92
 msgid "hand raised"
 msgstr "mână ridicată"
 
-#: includes/labels.php:99
+#: includes/labels.php:93
 msgid "locked"
 msgstr "blocată"
 
@@ -625,3 +601,21 @@ msgstr "Conferință video"
 #: videowhisper-video-conference.php:96
 msgid "This meeting does not exist. Check the invitation link."
 msgstr "Această întâlnire nu există. Verifică linkul de invitație."
+
+#~ msgid "Browser permission required"
+#~ msgstr "Este necesară permisiunea browserului"
+
+#~ msgid "Camera preview starts when you join."
+#~ msgstr "Previzualizarea camerei începe când intri în întâlnire."
+
+#~ msgid "Connected"
+#~ msgstr "Conectat"
+
+#~ msgid "Connecting"
+#~ msgstr "Se conectează"
+
+#~ msgid "Offline"
+#~ msgstr "Deconectat"
+
+#~ msgid "Small group mesh (up to four participants)"
+#~ msgstr "Grup mic în rețea mesh (cel mult patru participanți)"

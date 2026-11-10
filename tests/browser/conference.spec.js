@@ -105,3 +105,19 @@ test('quick demo prefills editable names and browser quotas do not block another
   await other.goto('/');const create=other.locator('form').filter({has:other.getByRole('button',{name:'Create meeting',exact:true})});await create.getByRole('checkbox').check();await create.getByRole('button').click();await expect(other.getByRole('button',{name:'Join meeting',exact:true})).toBeVisible();
  }finally{await context.close();}
 });
+
+test('entry form prioritizes joining above invitations without requesting camera access',async({page})=>{
+ await page.addInitScript(()=>{window.lobbyMediaRequests=0;const getMedia=navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices);navigator.mediaDevices.getUserMedia=(...args)=>{window.lobbyMediaRequests++;return getMedia(...args);};});
+ await page.goto('/');const create=page.locator('form').filter({has:page.getByRole('button',{name:'Create meeting',exact:true})});await create.getByLabel('Room title').fill('Quick lobby test');await create.getByLabel('Room access').selectOption('public');await create.getByRole('checkbox').check();await create.getByRole('button').click();
+ const name=page.getByLabel('Display name',{exact:true}),join=page.getByRole('button',{name:'Join meeting',exact:true}),invitations=page.getByRole('region',{name:'Invite participants',exact:true});
+ for(const viewport of [{width:1280,height:900},{width:390,height:844},{width:320,height:640}]){
+  await page.setViewportSize(viewport);await page.evaluate(()=>scrollTo(0,0));await expect(name).toBeInViewport();await expect(join).toBeInViewport();
+  const field=await name.boundingBox(),button=await join.boundingBox(),invite=await invitations.boundingBox(),card=await page.locator('.vwc-lobby-card').boundingBox();
+  expect(field.y+field.height).toBeLessThan(button.y);expect(button.y+button.height).toBeLessThan(invite.y);expect(Math.abs(card.x+card.width/2-viewport.width/2)).toBeLessThan(1);
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);await expect(page.locator('video')).toHaveCount(0);await expect(page.getByText('Camera preview starts when you join.',{exact:true})).toHaveCount(0);
+  if(viewport.width!==320)await page.screenshot({path:`docs/staging/lobby-0.2.3-${viewport.width===1280?'desktop':'mobile'}.png`,fullPage:true});
+ }
+ expect(await page.evaluate(()=>window.lobbyMediaRequests)).toBe(0);await expect(join).toBeDisabled();await name.fill('Quick visitor');await name.press('Enter');await expect(join).toBeVisible();expect(await page.evaluate(()=>window.lobbyMediaRequests)).toBe(0);
+ await page.getByLabel('Use camera and microphone').uncheck();await page.getByRole('checkbox',{name:'I agree to connect to the configured signaling service and share media with participants when enabled.',exact:true}).check();await name.press('Enter');await expect(page.getByRole('button',{name:'Leave',exact:true})).toBeVisible();await expect(page.getByText('Quick visitor',{exact:true})).toBeVisible();expect(await page.evaluate(()=>window.lobbyMediaRequests)).toBe(0);
+ await page.getByRole('button',{name:'Leave',exact:true}).click();
+});

@@ -2,7 +2,7 @@
 
 Free, self-hostable video meetings for small groups, with camera/microphone, optional screen sharing, chat, gallery/speaker layouts, hand raising and host controls. The same React client runs in the PHP standalone edition and WordPress plugin.
 
-**Try the [live conference demo](https://demo.videowhisper.com/video-conference/).** Create a room once, then copy its invitation into another browser or send it to your participants. Standalone edition 0.2.2 includes the PHP demo quota/idle-cleanup fix and generated editable room/guest names. The separately reviewed WordPress edition remains 0.2.1. This is a peer-to-peer mesh application with a technical maximum of four participants. A low-bandwidth profile helps small meetings fit developer hosting plans; screen sharing uses additional plan resources. It has no recording, SFU, file transfer or shared playback.
+**Try the [live conference demo](https://demo.videowhisper.com/video-conference/).** Create a room once, then copy its invitation into another browser or send it to your participants. Edition 0.2.3 includes a compact, centered entry form: choose your name and media, join the meeting, and find invitations below. Both PHP and WordPress use the same client. The PHP demo includes generated editable room/guest names and idle-room cleanup. This is a peer-to-peer mesh application with a technical maximum of four participants. A low-bandwidth profile helps small meetings fit developer hosting plans; screen sharing uses additional plan resources. It has no recording, SFU, file transfer or shared playback.
 
 ![VideoWhisper conference interface with AI-generated meeting participants](docs/screenshots/gallery-marketing.png)
 
@@ -59,7 +59,7 @@ Browser PINs are signed bearer credentials scoped to one account, user, room, ro
 
 ## WordPress Free edition
 
-Public plugin source is in `editions/wordpress/`. The development workspace keeps its canonical copy under `wordpress/videowhisper-video-conference/trunk/`. Install the generated `videowhisper-video-conference-0.2.1.zip` after reviewing the release gates. Requires WordPress 6.9+ and PHP 8.2+; use a currently supported PHP hosting branch.
+Public plugin source is in `editions/wordpress/`. The development workspace keeps its canonical copy under `wordpress/videowhisper-video-conference/trunk/`. Install the generated `videowhisper-video-conference-0.2.3.zip` after reviewing the release gates. Requires WordPress 6.9+ and PHP 8.2+; use a currently supported PHP hosting branch.
 
 Configure Video Conferences > Settings with a **dedicated** account, then create and publish a Video Conference. Use **Open conference** in the meeting list/editor to open its frontend URL and **Invite** to share it. `[videowhisper_conference id="123"]` is available for optional embedding. Signed-in users who can edit the meeting are hosts; other signed-in participants are guests. New meetings require signed-in members by default. Private mode allows guests holding a complete invitation with its access key. Public mode allows anyone with the room URL. Existing access settings are preserved. Private keys can be replaced in the editor; this rejects previous invitations/credentials on new connections, without disconnecting participants already present. No block, schedule or LMS adapter is claimed in v1.
 

@@ -1,6 +1,6 @@
 # Publish the Free conference editions
 
-Owner: VideoWhisper. Standalone candidate: 0.2.2; WordPress submission candidate: 0.2.1. Audience: small groups and WordPress site owners. The live development demo is https://demo.videowhisper.com/video-conference/ . The shared server must be version 2026.11.10+ with the conference namespace enabled. This is four-person P2P mesh, with no SFU or recording.
+Owner: VideoWhisper. Standalone and WordPress candidate: 0.2.3. Audience: small groups and WordPress site owners. The live development demo is https://demo.videowhisper.com/video-conference/ . The shared server must be version 2026.11.10+ with the conference namespace enabled. This is four-person P2P mesh, with no SFU or recording.
 
 ## Verify the release
 
@@ -12,7 +12,7 @@ The runtime and public-source exports are explicit allowlists. Inspect the ZIP l
 
 1. Use release/WebRTC-Video-Conference/ as the clean source export. Do not initialize Git in the private development tree or copy its public/config.json. Review LICENSE, notices, README and tests.
 2. Create videowhisper/WebRTC-Video-Conference at https://github.com/new (select the `videowhisper` owner) . Use GPL-2.0-or-later, the verified PHP demo as website, and a description stating small-room self-hostable WebRTC conferencing.
-3. In the clean export, initialize a main branch, add only reviewed files, commit, add the new origin and push. Tag v0.2.2 and create a release containing WebRTC-Video-Conference-0.2.2.zip and its SHA256. Verify a clean clone can npm ci/build and run the synthetic tests.
+3. In the clean export, initialize a main branch, add only reviewed files, commit, add the new origin and push. Tag v0.2.3 and create a release containing WebRTC-Video-Conference-0.2.3.zip and its SHA256. Verify a clean clone can npm ci/build and run the synthetic tests.
 4. The current client can be published with its isolated local test harness and a clear server prerequisite. The managed demo has the conference extension; the corresponding public server source release is still being prepared. Do not imply the older public server main branch already includes conferencing or that every clone is a ready production server. Managed server availability is a separate option, not an account requirement for the software.
 5. Retain the historical PHP-Webcam-Video-Conference repository and its old instructions. After the new repository works, propose a successor notice and archive policy; do not silently replace its code.
 
@@ -22,7 +22,7 @@ For PHP-only maintenance, run `npm run package -- --standalone-only`. This retai
 
 ## Submit the WordPress Free plugin
 
-1. The permanent proposed slug/text domain is videowhisper-video-conference. Use release/videowhisper-video-conference-0.2.1.zip. Review the [directory guidelines](https://developer.wordpress.org/plugins/wordpress-org/detailed-plugin-guidelines/), [submission instructions](https://developer.wordpress.org/plugins/wordpress-org/planning-submitting-and-maintaining-plugins/) and [developer FAQ](https://developer.wordpress.org/plugins/wordpress-org/plugin-developer-faq/).
+1. The permanent proposed slug/text domain is videowhisper-video-conference. Use release/videowhisper-video-conference-0.2.3.zip. Review the [directory guidelines](https://developer.wordpress.org/plugins/wordpress-org/detailed-plugin-guidelines/), [submission instructions](https://developer.wordpress.org/plugins/wordpress-org/planning-submitting-and-maintaining-plugins/) and [developer FAQ](https://developer.wordpress.org/plugins/wordpress-org/plugin-developer-faq/).
 2. Check the submitting author's live queue; generally only one new plugin may be under review. Tutor LMS was approved in August; still check the live author queue and coordinate Conference/Elementor submissions before uploading. Confirm the company-owned account/email and plugin-name ownership.
 3. Review server/provider disclosures, participant consent, no-store responses, guest defaults, optional service links, complete Free functionality, bundled source/licenses and localization. The technical four-person limit is explicit, not a paid unlock. CRM registration is deferred; there are no hidden Pro features or automatic external calls on activation.
 4. Complete clean install/upgrade and minimum/current WordPress/PHP checks, Plugin Check, [official readme validation](https://wordpress.org/plugins/developers/readme-validator/) and real browser/device checks. Use authentic synthetic-media screenshots. A development preview alone is not directory production-readiness evidence.
@@ -39,6 +39,6 @@ Add the PHP demo under Try Standalone Apps on the Demo page. Keep development-pr
 
 ## Owner submission handoff
 
-Use the exact reviewed 0.2.1 ZIP and SHA256 from release/SHA256SUMS and the current release-readiness report. The main wordpress/ handoff copy must be byte-identical. Confirm the live author queue and complete ownership/compliance attestations yourself at https://wordpress.org/plugins/developers/add/ . Preparing the ZIP is not a submission receipt. Include the screenshot assets from the companion assets/ directory after approval; keep them outside the plugin runtime ZIP.
+Use the exact reviewed 0.2.3 ZIP and SHA256 from release/SHA256SUMS and the current release-readiness report. The main wordpress/ handoff copy must be byte-identical. Confirm the live author queue and complete ownership/compliance attestations yourself at https://wordpress.org/plugins/developers/add/ . Preparing the ZIP is not a submission receipt. Include the screenshot assets from the companion assets/ directory after approval; keep them outside the plugin runtime ZIP.
 
 Record physical-device/two-network coverage and locale review accurately. The automated suite covers synthetic multi-browser media, private invitation acceptance/denial, public presence, hand feedback, themes, narrow panel layout and WordPress authorization. Existing manual test evidence must not be relabeled as coverage of every device. Private invitation keys in URLs are scoped room capabilities, never service-account tokens.

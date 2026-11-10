@@ -2,14 +2,14 @@
 # This file is distributed under the GPL-2.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: VideoWhisper Video Conference 0.2.1\n"
+"Project-Id-Version: VideoWhisper Video Conference 0.2.3\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/videowhisper-video-conference\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-11-10T17:17:14+00:00\n"
+"POT-Creation-Date: 2026-11-10T18:12:18+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: videowhisper-video-conference\n"
@@ -47,367 +47,343 @@ msgid "Ask the meeting owner for an invitation link."
 msgstr ""
 
 #: includes/labels.php:9
-msgid "Browser permission required"
-msgstr ""
-
-#: includes/labels.php:10
 msgid "Camera or microphone unavailable. Allow browser access or join without media."
 msgstr ""
 
-#: includes/labels.php:11
-msgid "Camera preview starts when you join."
-msgstr ""
-
-#: includes/labels.php:12
+#: includes/labels.php:10
 msgid "Chat"
 msgstr ""
 
-#: includes/labels.php:13
+#: includes/labels.php:11
 msgid "Close chat"
 msgstr ""
 
-#: includes/labels.php:14
+#: includes/labels.php:12
 msgid "Close invitations"
 msgstr ""
 
-#: includes/labels.php:15
+#: includes/labels.php:13
 msgid "Close people"
 msgstr ""
 
-#: includes/labels.php:16
+#: includes/labels.php:14
 msgid "Conference error"
 msgstr ""
 
-#: includes/labels.php:17
+#: includes/labels.php:15
 msgid "Conference not configured"
 msgstr ""
 
-#: includes/labels.php:18
-msgid "Connected"
-msgstr ""
-
-#: includes/labels.php:19
-msgid "Connecting"
-msgstr ""
-
-#: includes/labels.php:20
+#: includes/labels.php:16
 msgid "Connection failed. Check your server settings or reload to retry."
 msgstr ""
 
-#: includes/labels.php:21
+#: includes/labels.php:17
 msgid "Copy invitation link"
 msgstr ""
 
-#: includes/labels.php:22
+#: includes/labels.php:18
 msgid "Display name"
 msgstr ""
 
-#: includes/labels.php:23
+#: includes/labels.php:19
 msgid "Enter a message of up to 2000 characters."
 msgstr ""
 
-#: includes/labels.php:24
+#: includes/labels.php:20
 msgid "Gallery"
 msgstr ""
 
-#: includes/labels.php:25
+#: includes/labels.php:21
 msgid "Guest"
 msgstr ""
 
-#: includes/labels.php:26
+#: includes/labels.php:22
 msgid "Hand raised"
 msgstr ""
 
-#: includes/labels.php:27
+#: includes/labels.php:23
 msgid "Host"
 msgstr ""
 
-#: includes/labels.php:28
+#: includes/labels.php:24
 msgid "I agree to connect to the configured signaling service and share media with participants when enabled."
 msgstr ""
 
-#: includes/labels.php:29
+#: includes/labels.php:25
 #: includes/meetings.php:77
 msgid "Invitation link"
 msgstr ""
 
-#: includes/labels.php:30
+#: includes/labels.php:26
 msgid "Invitation link copied."
 msgstr ""
 
-#: includes/labels.php:31
+#: includes/labels.php:27
 msgid "Invitation shared."
 msgstr ""
 
-#: includes/labels.php:32
+#: includes/labels.php:28
 msgid "Invite"
 msgstr ""
 
-#: includes/labels.php:33
+#: includes/labels.php:29
 msgid "Invite participants"
 msgstr ""
 
-#: includes/labels.php:34
+#: includes/labels.php:30
 msgid "Join meeting"
 msgstr ""
 
-#: includes/labels.php:35
+#: includes/labels.php:31
 msgid "Join the meeting before continuing."
 msgstr ""
 
-#: includes/labels.php:36
+#: includes/labels.php:32
 msgid "Joining meeting…"
 msgstr ""
 
-#: includes/labels.php:37
+#: includes/labels.php:33
 msgid "Leave"
 msgstr ""
 
-#: includes/labels.php:38
+#: includes/labels.php:34
 msgid "Loading meeting"
 msgstr ""
 
-#: includes/labels.php:39
+#: includes/labels.php:35
 msgid "Lock meeting"
 msgstr ""
 
-#: includes/labels.php:40
+#: includes/labels.php:36
 msgid "Lower hand"
 msgstr ""
 
-#: includes/labels.php:41
+#: includes/labels.php:37
 msgid "Media connection failed. Leave and rejoin to retry."
 msgstr ""
 
-#: includes/labels.php:42
+#: includes/labels.php:38
 msgid "Media signaling was rejected."
 msgstr ""
 
-#: includes/labels.php:43
+#: includes/labels.php:39
 msgid "Message"
 msgstr ""
 
-#: includes/labels.php:44
+#: includes/labels.php:40
 msgid "Mute all guests"
 msgstr ""
 
-#: includes/labels.php:45
+#: includes/labels.php:41
 msgid "Mute microphone"
 msgstr ""
 
-#: includes/labels.php:46
-msgid "Offline"
-msgstr ""
-
-#: includes/labels.php:47
+#: includes/labels.php:42
 msgid "Open the same invitation in another browser or send it to your participants. Creating another room starts a separate meeting."
 msgstr ""
 
-#: includes/labels.php:48
+#: includes/labels.php:43
 msgid "Participant"
 msgstr ""
 
-#: includes/labels.php:49
+#: includes/labels.php:44
 msgid "Participants must sign in on this site before joining."
 msgstr ""
 
-#: includes/labels.php:50
+#: includes/labels.php:45
 msgid "People"
 msgstr ""
 
-#: includes/labels.php:51
+#: includes/labels.php:46
 msgid "Pin"
 msgstr ""
 
-#: includes/labels.php:52
+#: includes/labels.php:47
 msgid "Preparing VideoWhisper conference configuration."
 msgstr ""
 
-#: includes/labels.php:53
+#: includes/labels.php:48
 msgid "Private room · invitation required"
 msgstr ""
 
-#: includes/labels.php:54
+#: includes/labels.php:49
 msgid "Public room"
 msgstr ""
 
-#: includes/labels.php:55
+#: includes/labels.php:50
 msgid "Publishing this stream is not permitted."
 msgstr ""
 
-#: includes/labels.php:56
+#: includes/labels.php:51
 msgid "Raise hand"
 msgstr ""
 
-#: includes/labels.php:57
+#: includes/labels.php:52
 msgid "Reconnecting to the meeting…"
 msgstr ""
 
-#: includes/labels.php:58
+#: includes/labels.php:53
 msgid "Remove"
 msgstr ""
 
-#: includes/labels.php:59
+#: includes/labels.php:54
 msgid "Request mute"
 msgstr ""
 
-#: includes/labels.php:60
+#: includes/labels.php:55
 msgid "Screen"
 msgstr ""
 
-#: includes/labels.php:61
+#: includes/labels.php:56
 msgid "Screen sharing was cancelled or unavailable."
 msgstr ""
 
-#: includes/labels.php:62
+#: includes/labels.php:57
 msgid "Select and copy the invitation link below."
 msgstr ""
 
-#: includes/labels.php:63
+#: includes/labels.php:58
 msgid "Send message"
 msgstr ""
 
-#: includes/labels.php:64
+#: includes/labels.php:59
 msgid "Session ended. Reload the page to rejoin."
 msgstr ""
 
-#: includes/labels.php:65
+#: includes/labels.php:60
 msgid "Share invitation"
 msgstr ""
 
-#: includes/labels.php:66
+#: includes/labels.php:61
 msgid "Share screen"
 msgstr ""
 
-#: includes/labels.php:67
+#: includes/labels.php:62
 msgid "Sharing cancelled. You can copy the link instead."
 msgstr ""
 
-#: includes/labels.php:68
+#: includes/labels.php:63
 msgid "Sign-in required"
 msgstr ""
 
-#: includes/labels.php:69
-msgid "Small group mesh (up to four participants)"
-msgstr ""
-
-#: includes/labels.php:70
+#: includes/labels.php:64
 msgid "Speaker"
 msgstr ""
 
-#: includes/labels.php:71
+#: includes/labels.php:65
 msgid "Spotlight"
 msgstr ""
 
-#: includes/labels.php:72
+#: includes/labels.php:66
 msgid "Start camera"
 msgstr ""
 
-#: includes/labels.php:73
+#: includes/labels.php:67
 msgid "Stop camera"
 msgstr ""
 
-#: includes/labels.php:74
+#: includes/labels.php:68
 msgid "Stop sharing"
 msgstr ""
 
-#: includes/labels.php:75
+#: includes/labels.php:69
 msgid "System"
 msgstr ""
 
-#: includes/labels.php:76
+#: includes/labels.php:70
 msgid "The configured server plan cannot publish this stream."
 msgstr ""
 
-#: includes/labels.php:77
+#: includes/labels.php:71
 msgid "The media signaling request is invalid."
 msgstr ""
 
-#: includes/labels.php:78
+#: includes/labels.php:72
 msgid "The meeting request is invalid."
 msgstr ""
 
-#: includes/labels.php:79
+#: includes/labels.php:73
 msgid "Theme: dark. Switch to system."
 msgstr ""
 
-#: includes/labels.php:80
+#: includes/labels.php:74
 msgid "Theme: light. Switch to dark."
 msgstr ""
 
-#: includes/labels.php:81
+#: includes/labels.php:75
 msgid "Theme: system. Switch to light."
 msgstr ""
 
-#: includes/labels.php:82
+#: includes/labels.php:76
 msgid "This action requires a host."
 msgstr ""
 
-#: includes/labels.php:83
+#: includes/labels.php:77
 msgid "This browser session is already in the meeting."
 msgstr ""
 
-#: includes/labels.php:84
+#: includes/labels.php:78
 msgid "This meeting is full."
 msgstr ""
 
-#: includes/labels.php:85
+#: includes/labels.php:79
 msgid "This meeting is locked."
 msgstr ""
 
-#: includes/labels.php:86
+#: includes/labels.php:80
 msgid "This server needs the conference extension."
 msgstr ""
 
-#: includes/labels.php:87
+#: includes/labels.php:81
 msgid "Too many requests. Please wait."
 msgstr ""
 
-#: includes/labels.php:88
+#: includes/labels.php:82
 msgid "Unknown status."
 msgstr ""
 
-#: includes/labels.php:89
+#: includes/labels.php:83
 msgid "Unlock meeting"
 msgstr ""
 
-#: includes/labels.php:90
+#: includes/labels.php:84
 msgid "Unmute microphone"
 msgstr ""
 
-#: includes/labels.php:91
+#: includes/labels.php:85
 msgid "Use camera and microphone"
 msgstr ""
 
-#: includes/labels.php:92
+#: includes/labels.php:86
 msgid "Video meeting"
 msgstr ""
 
-#: includes/labels.php:93
+#: includes/labels.php:87
 msgid "You cannot join this meeting."
 msgstr ""
 
-#: includes/labels.php:94
+#: includes/labels.php:88
 msgid "You were removed from this meeting."
 msgstr ""
 
-#: includes/labels.php:95
+#: includes/labels.php:89
 msgid "Your hand is raised."
 msgstr ""
 
-#: includes/labels.php:96
+#: includes/labels.php:90
 msgid "Your screen"
 msgstr ""
 
-#: includes/labels.php:97
+#: includes/labels.php:91
 msgid "Your session expired. Reload the page to rejoin."
 msgstr ""
 
-#: includes/labels.php:98
+#: includes/labels.php:92
 msgid "hand raised"
 msgstr ""
 
-#: includes/labels.php:99
+#: includes/labels.php:93
 msgid "locked"
 msgstr ""
 

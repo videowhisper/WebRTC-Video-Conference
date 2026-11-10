@@ -39,6 +39,17 @@ video {
 .vwc-border { border-color:var(--vwc-border); }
 button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible { outline:2px solid var(--vwc-accent); outline-offset:3px; }
 .vwc-app button { flex-shrink:0; }
+.vwc-lobby { min-height:100vh; min-height:100dvh; display:flex; align-items:center; justify-content:center; padding:clamp(1rem,3vw,2rem); }
+.vwc-lobby-card { width:100%; max-width:40rem; min-width:0; padding:clamp(1rem,3vw,2rem); border:1px solid var(--vwc-border); border-radius:1rem; box-shadow:0 12px 35px #0000000d; }
+.vwc-lobby-heading { display:flex; align-items:flex-start; justify-content:space-between; gap:1rem; margin-bottom:1.5rem; }
+.vwc-lobby-heading h1 { overflow-wrap:anywhere; }
+.vwc-lobby-form { display:flex; flex-direction:column; gap:1rem; }
+.vwc-name-input { width:100%; min-width:0; margin-top:-.5rem; padding:.75rem; border:1px solid var(--vwc-border); border-radius:.5rem; }
+.vwc-lobby-option { display:flex; align-items:flex-start; gap:.65rem; line-height:1.5; }
+.vwc-lobby-option input { flex:none; margin-top:.25rem; }
+.vwc-lobby-notice { color:var(--vwc-accent); }
+.vwc-lobby-join { width:100%; }
+.vwc-lobby-card > .vwc-invite-inline { margin:1.5rem 0 0; }
 .vwc-theme-toggle, .vwc-invite-button { display:inline-flex; align-items:center; justify-content:center; gap:.45rem; border:1px solid var(--vwc-border); background:var(--vwc-surface); color:var(--vwc-text); border-radius:.5rem; padding:.5rem; cursor:pointer; }
 .vwc-meeting { height:100vh; height:100dvh; min-height:32rem; overflow:hidden; }
 .vwc-meeting-header { min-height:3.5rem; gap:.5rem; flex-wrap:wrap; padding-block:.4rem; }
@@ -63,8 +74,6 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
  .vwc-workspace { flex-direction:column; }
  .vwc-panel { width:100%; height:35dvh; min-height:10rem; max-height:22rem; border-inline-start:0; border-top:1px solid var(--vwc-border); }
  .vwc-stage { min-height:11rem; }
- .vwc-preview { min-height:30vh; }
- .vwc-lobby > div { min-height:100dvh; }
  .vwc-meeting-header { padding-inline:.6rem; }
  .vwc-header-actions { gap:.3rem; }
  .vwc-invite-button { font-size:.8rem; }
