@@ -1,6 +1,7 @@
 <?php
 /** PHP 8.2+ standalone meeting host. Keep environment configuration outside the webroot. */
 require __DIR__ . '/includes/tickets.php';
+require __DIR__ . '/includes/demo-state.php';
 header('Cache-Control: no-store, private, max-age=0');
 header('X-Content-Type-Options: nosniff');
 header('Referrer-Policy: no-referrer');
@@ -15,11 +16,23 @@ $webroot = realpath($_SERVER['DOCUMENT_ROOT'] ?? __DIR__) ?: __DIR__;
 $outsideWebroot = $realStorage && $realStorage !== $webroot && !str_starts_with($realStorage, $webroot . DIRECTORY_SEPARATOR);
 $ready = $outsideWebroot && $account && $token && strlen($key) >= 32 && $socket && is_writable($storage);
 $e = static fn($text) => htmlspecialchars((string) $text, ENT_QUOTES, 'UTF-8');
+$limits = VWC_DemoState::limits();
 if (($_GET['action'] ?? '') === 'auth') {
     header('Content-Type: application/json');
     if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !$ready) { http_response_code(403); echo '{"login":false}'; exit; }
     $input = json_decode(file_get_contents('php://input', false, null, 0, 16384), true);
-    echo json_encode(is_array($input) ? VWC_Tickets::verify($key, $token, $input) : ['login' => false]); exit;
+    $result = is_array($input) ? VWC_Tickets::verify($key, $token, $input) : ['login' => false];
+    if ($result['login']) {
+        $ledger = is_file($storage . '/rooms.json') ? fopen($storage . '/rooms.json', 'r') : false;
+        if (!$ledger || !flock($ledger, LOCK_SH)) $result = ['login' => false];
+        else {
+            $state = VWC_DemoState::prune(json_decode(stream_get_contents($ledger), true) ?: [], time(), $limits['idle']);
+            if (!isset($state['rooms'][$result['conference']['room']])) $result = ['login' => false];
+            flock($ledger, LOCK_UN);
+        }
+        if ($ledger) fclose($ledger);
+    }
+    echo json_encode($result); exit;
 }
 $secure = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
 if (!$secure && !in_array($_SERVER['REMOTE_ADDR'] ?? '', ['127.0.0.1', '::1'], true)) { http_response_code(400); exit('HTTPS required.'); }
@@ -49,19 +62,17 @@ if ($ready) {
     if (!$file || !flock($file, LOCK_EX)) { http_response_code(503); exit('Meeting storage unavailable.'); }
     $state = json_decode(stream_get_contents($file), true) ?: ['rooms' => [], 'rates' => []];
     $now = time();
-    $state['rooms'] = array_filter($state['rooms'] ?? [], static fn($room) => ($room['expires'] ?? 0) > $now);
-    $state['rates'] = array_filter($state['rates'] ?? [], static fn($rate) => ($rate['expires'] ?? 0) > $now);
+    $state = VWC_DemoState::prune($state, $now, $limits['idle']);
     $_SESSION['rooms'] = array_intersect_key($_SESSION['rooms'], $state['rooms']);
     $_SESSION['entry_config'] = array_intersect_key($_SESSION['entry_config'], $state['rooms']);
     $_SESSION['authorized'] = array_intersect_key(array_filter($_SESSION['authorized'], static fn($expires) => $expires > $now), $state['rooms']);
-    foreach ($state['rooms'] as &$entry) $entry['members'] = array_filter($entry['members'] ?? [], static fn($seen) => $seen > $now - 60);
-    unset($entry);
     if (($_GET['action'] ?? '') === 'presence') {
         $presence = json_decode(file_get_contents('php://input', false, null, 0, 4096), true);
         $room = is_string($presence['room'] ?? null) ? $presence['room'] : '';
         $valid = $_SERVER['REQUEST_METHOD'] === 'POST' && is_string($presence['csrf'] ?? null) && hash_equals($_SESSION['csrf'], $presence['csrf']) &&
             ($_SESSION['authorized'][$room] ?? 0) > $now && isset($state['rooms'][$room]);
         if ($valid) {
+            $state['rooms'][$room]['lastActive'] = $now;
             $member = hash_hmac('sha256', $_SESSION['user'], $key);
             if (($presence['present'] ?? false) === true) {
                 if (isset($state['rooms'][$room]['members'][$member]) || count($state['rooms'][$room]['members']) < 16) $state['rooms'][$room]['members'][$member] = $now;
@@ -78,18 +89,24 @@ if ($ready) {
         } else {
             if (($_POST['operation'] ?? '') === 'create' || (!$room && !isset($_POST['operation']))) {
                 $ip = hash_hmac('sha256', $_SERVER['REMOTE_ADDR'] ?? '', $key);
-                $rate = $state['rates'][$ip] ?? ['expires' => $now + 3600, 'count' => 0];
-                if ($rate['count'] >= 5 || count($state['rooms']) >= 20) $error = 'Demo room quota reached. Please try again later.';
+                $session = 'session:' . hash_hmac('sha256', $_SESSION['user'], $key);
+                $denied = VWC_DemoState::creationError($state, $session, $ip, $now, $limits);
+                if ($denied) {
+                    $error = $denied['message']; http_response_code($denied['status']); header('Retry-After: ' . $denied['retry']);
+                }
                 else {
                     $room = 'Meeting_' . bin2hex(random_bytes(16));
                     $access = ($_POST['access'] ?? '') === 'public' ? 'public' : 'private';
                     $accessKey = $access === 'private' ? bin2hex(random_bytes(32)) : '';
                     $title = trim((string) ($_POST['title'] ?? ''));
                     $title = preg_match('/^.{1,80}/us', $title, $titleMatch) ? $titleMatch[0] : 'Video conference';
-                    $state['rooms'][$room] = ['expires' => $now + 3600, 'access' => $access, 'title' => $title,
+                    $state['rooms'][$room] = ['expires' => $now + 3600, 'lastActive' => $now, 'access' => $access, 'title' => $title,
                         'keyHash' => $accessKey ? hash('sha256', $accessKey) : '', 'members' => []];
-                    $_SESSION['rooms'][$room] = ['key' => $accessKey]; $rate['count']++;
-                    $state['rates'][$ip] = $rate;
+                    $_SESSION['rooms'][$room] = ['key' => $accessKey];
+                    foreach ([$session, $ip] as $id) {
+                        $rate = $state['rates'][$id] ?? ['expires' => $now + 3600, 'count' => 0];
+                        $rate['count']++; $state['rates'][$id] = $rate;
+                    }
                 }
             }
             if (!$error && (!preg_match('/^Meeting_[a-f0-9]{32}$/D', $room) || !isset($state['rooms'][$room]))) $error = 'This meeting does not exist or has expired. Ask its owner for a new invitation.';
@@ -101,8 +118,10 @@ if ($ready) {
                     http_response_code(403); $error = 'This private room requires its access key. Use the complete invitation link or enter the key below.';
                 } else {
                     $_SESSION['authorized'][$room] = $entry['expires'];
+                    $state['rooms'][$room]['lastActive'] = $now;
                     $pin = VWC_Tickets::issue($key, $account, $_SESSION['user'], $room, $isHost ? 'host' : 'guest', 4, $entry['expires']);
                     $config = VWC_Tickets::config($socket, $account, $_SESSION['user'], $pin, $room, $entry['title'] ?? 'Video conference');
+                    $config['displayName'] = 'Guest ' . strtoupper(substr($_SESSION['user'], -4));
                     $config['roomAccess'] = $entry['access'] ?? 'private';
                     $config['inviteUrl'] = $base . '?' . http_build_query(array_filter(['room' => $room, 'key' => $accessKey], static fn($v) => $v !== ''));
                     $config['presenceUrl'] = $base . '?action=presence'; $config['presenceCsrf'] = $_SESSION['csrf'];
@@ -113,7 +132,9 @@ if ($ready) {
     // POST/redirect/GET keeps the invitation in the address bar and prevents refresh from creating another room.
     if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_SESSION['entry_config'][$room], $state['rooms'][$room])) {
         $entry = $state['rooms'][$room];
-        if (isset($_SESSION['rooms'][$room]) || empty($entry['keyHash']) || hash_equals($entry['keyHash'], hash('sha256', $accessKey))) $config = $_SESSION['entry_config'][$room];
+        if (isset($_SESSION['rooms'][$room]) || empty($entry['keyHash']) || hash_equals($entry['keyHash'], hash('sha256', $accessKey))) {
+            $config = $_SESSION['entry_config'][$room]; $state['rooms'][$room]['lastActive'] = $now;
+        }
     }
     $roomInfo = $state['rooms'][$room] ?? null;
     foreach ($state['rooms'] as $id => $entry) {
@@ -134,7 +155,9 @@ header("Content-Security-Policy: default-src 'self'; script-src 'self' 'nonce-$n
 $assetHashes = '';
 foreach (['assets/conference.js', 'assets/conference.css', 'setup.css', 'setup.js', 'theme.js'] as $asset) $assetHashes .= is_file(__DIR__ . '/' . $asset) ? hash_file('sha256', __DIR__ . '/' . $asset) : '';
 $assetVersion = substr(hash('sha256', $assetHashes), 0, 12);
-$consent = 'I agree to connect to this site\'s configured signaling service. Other participants receive my display name and enabled media. TURN may relay media. Rooms expire after one hour; chat is held in server memory while the room exists. Do not share sensitive information on this public demo.';
+$suggestedTitle = trim((string) ($_POST['title'] ?? '')) ?: 'Video meeting ' . strtoupper(bin2hex(random_bytes(2)));
+$suggestedAccess = ($_POST['access'] ?? '') === 'public' ? 'public' : 'private';
+$consent = 'I agree to connect to this site\'s configured signaling service. Other participants receive my display name and enabled media. TURN may relay media. Rooms expire after one hour, or after ' . (int) ceil($limits['idle'] / 60) . ' minutes without activity; chat is held in server memory while the room exists. Do not share sensitive information on this public demo.';
 ?>
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>VideoWhisper Video Conference</title><link rel="stylesheet" href="./assets/conference.css?v=<?php echo $e($assetVersion); ?>"><link rel="stylesheet" href="./setup.css?v=<?php echo $e($assetVersion); ?>"></head><body>
 <?php if ($config): ?>
@@ -152,8 +175,8 @@ $consent = 'I agree to connect to this site\'s configured signaling service. Oth
 <?php else: ?>
 <div class="setup-columns"><section class="setup-card"><h2>Create a room</h2><p>Create once, then use Invite in the meeting to copy its link for everyone.</p>
 <form method="post"><input type="hidden" name="csrf" value="<?php echo $e($csrf); ?>"><input type="hidden" name="operation" value="create">
-<label>Room title<input name="title" maxlength="80" placeholder="Team catch-up"></label>
-<label>Room access<select name="access"><option value="private">Private — invitation with access key</option><option value="public">Public — listed while participants are present</option></select></label>
+<label>Room title<input name="title" maxlength="80" value="<?php echo $e($suggestedTitle); ?>"></label>
+<label>Room access<select name="access"><option value="private" <?php echo $suggestedAccess === 'private' ? 'selected' : ''; ?>>Private — invitation with access key</option><option value="public" <?php echo $suggestedAccess === 'public' ? 'selected' : ''; ?>>Public — listed while participants are present</option></select></label>
 <label class="consent"><input type="checkbox" name="consent" required> <?php echo $e($consent); ?></label><button type="submit">Create meeting</button></form></section>
 <section class="setup-card"><h2>Have an invitation?</h2><p>Paste the invitation link or room name. Creating a new room will not join your existing meeting.</p>
 <form method="post"><input type="hidden" name="csrf" value="<?php echo $e($csrf); ?>"><input type="hidden" name="operation" value="join"><label>Invitation link or room name<input name="room" required maxlength="2048" placeholder="Paste an invitation link"></label><label>Access key (if not in the link)<input name="key" autocomplete="off" maxlength="128"></label><label class="consent"><input type="checkbox" name="consent" required> <?php echo $e($consent); ?></label><button type="submit">Open meeting</button></form></section></div>

@@ -85,3 +85,23 @@ test('theme defaults to system and narrow chat stays below the media without ove
 test('UTF-8 room titles survive creation and refresh without splitting characters',async({page})=>{
  const title='A'+'ă'.repeat(40);await page.goto('/');const form=page.locator('form').filter({has:page.getByRole('button',{name:'Create meeting',exact:true})});await form.getByLabel('Room title').fill(title);await form.getByRole('checkbox').check();await form.getByRole('button').click();await expect(page.getByRole('heading',{name:title,exact:true})).toBeVisible();const url=page.url();await page.reload();expect(page.url()).toBe(url);await expect(page.getByRole('heading',{name:title,exact:true})).toBeVisible();
 });
+
+test('quick demo prefills editable names and browser quotas do not block another browser',async({page,browser})=>{
+ for(let i=0;i<10;i++){
+  await page.goto('/');const form=page.locator('form').filter({has:page.getByRole('button',{name:'Create meeting',exact:true})});
+  const title=await form.getByLabel('Room title').inputValue();expect(title).toMatch(/^Video meeting [A-F0-9]{4}$/);
+  if(i===0) await form.getByLabel('Room title').fill('My quick demo');
+  await form.getByRole('checkbox').check();await form.getByRole('button').click();
+  await expect(page.getByLabel('Display name',{exact:true})).toHaveValue(/^Guest [A-F0-9]{4}$/);
+  await expect(page.getByRole('heading',{name:i===0?'My quick demo':title,exact:true})).toBeVisible();
+  const invite=page.url();await page.reload();expect(page.url()).toBe(invite);
+ }
+ await page.goto('/');const form=page.locator('form').filter({has:page.getByRole('button',{name:'Create meeting',exact:true})});
+ await form.getByLabel('Room title').fill('Keep my title');await form.getByLabel('Room access').selectOption('public');await form.getByRole('checkbox').check();
+ const response=page.waitForResponse(r=>r.request().method()==='POST'&&r.url()==='http://127.0.0.1:8091/');await form.getByRole('button').click();const denied=await response;
+ expect(denied.status()).toBe(429);expect(Number(denied.headers()['retry-after'])).toBeGreaterThan(0);await expect(page.getByRole('alert')).toContainText('This browser');
+ await expect(form.getByLabel('Room title')).toHaveValue('Keep my title');await expect(form.getByLabel('Room access')).toHaveValue('public');
+ const context=await browser.newContext();const other=await context.newPage();try{
+  await other.goto('/');const create=other.locator('form').filter({has:other.getByRole('button',{name:'Create meeting',exact:true})});await create.getByRole('checkbox').check();await create.getByRole('button').click();await expect(other.getByRole('button',{name:'Join meeting',exact:true})).toBeVisible();
+ }finally{await context.close();}
+});

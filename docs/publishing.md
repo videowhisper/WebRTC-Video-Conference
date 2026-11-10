@@ -1,6 +1,6 @@
 # Publish the Free conference editions
 
-Owner: VideoWhisper. Candidate: 0.2.1. Audience: small groups and WordPress site owners. The live development demo is https://demo.videowhisper.com/video-conference/ . The shared server must be version 2026.11.10+ with the conference namespace enabled. This is four-person P2P mesh, with no SFU or recording.
+Owner: VideoWhisper. Standalone candidate: 0.2.2; WordPress submission candidate: 0.2.1. Audience: small groups and WordPress site owners. The live development demo is https://demo.videowhisper.com/video-conference/ . The shared server must be version 2026.11.10+ with the conference namespace enabled. This is four-person P2P mesh, with no SFU or recording.
 
 ## Verify the release
 
@@ -12,11 +12,13 @@ The runtime and public-source exports are explicit allowlists. Inspect the ZIP l
 
 1. Use release/WebRTC-Video-Conference/ as the clean source export. Do not initialize Git in the private development tree or copy its public/config.json. Review LICENSE, notices, README and tests.
 2. Create videowhisper/WebRTC-Video-Conference at https://github.com/new (select the `videowhisper` owner) . Use GPL-2.0-or-later, the verified PHP demo as website, and a description stating small-room self-hostable WebRTC conferencing.
-3. In the clean export, initialize a main branch, add only reviewed files, commit, add the new origin and push. Tag v0.2.1 and create a release containing WebRTC-Video-Conference-0.2.1.zip and its SHA256. Verify a clean clone can npm ci/build and run the synthetic tests.
+3. In the clean export, initialize a main branch, add only reviewed files, commit, add the new origin and push. Tag v0.2.2 and create a release containing WebRTC-Video-Conference-0.2.2.zip and its SHA256. Verify a clean clone can npm ci/build and run the synthetic tests.
 4. The current client can be published with its isolated local test harness and a clear server prerequisite. The managed demo has the conference extension; the corresponding public server source release is still being prepared. Do not imply the older public server main branch already includes conferencing or that every clone is a ready production server. Managed server availability is a separate option, not an account requirement for the software.
 5. Retain the historical PHP-Webcam-Video-Conference repository and its old instructions. After the new repository works, propose a successor notice and archive policy; do not silently replace its code.
 
 Deploy only editions/php runtime files to an HTTPS path. Configure VWC_SOCKET_URL, VWC_ACCOUNT, VWC_ACCOUNT_TOKEN, VWC_SIGNING_KEY and VWC_STORAGE_DIR privately outside the webroot. Each edition needs a dedicated account callback; never overwrite an existing Broadcast/PPV/VideoCalls callback. The demonstration limits room creation, participants and expiry. Add provider/edge abuse controls, cleanup and a named support owner. Retain a directory/config snapshot for rollback; changing the new demo must not alter existing demos or their credentials.
+
+For PHP-only maintenance, run `npm run package -- --standalone-only`. This retains the reviewed WordPress source/package and produces only the standalone ZIP/checksum. Deploy index.php and includes/demo-state.php together for 0.2.2; keep the two prior files for rollback. Do not reset the live ledger or active sessions to clear a quota. Test browser/shared-IP/global limits, idle cleanup and invitation joins.
 
 ## Submit the WordPress Free plugin
 
