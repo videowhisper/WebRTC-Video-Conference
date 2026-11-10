@@ -4,7 +4,9 @@ Free, self-hostable video meetings for small groups, with camera/microphone, opt
 
 **Try the [live conference demo](https://demo.videowhisper.com/video-conference/).** Create a room once, then copy its invitation into another browser or send it to your participants. Standalone edition 0.2.2 includes the PHP demo quota/idle-cleanup fix and generated editable room/guest names. The separately reviewed WordPress edition remains 0.2.1. This is a peer-to-peer mesh application with a technical maximum of four participants. A low-bandwidth profile helps small meetings fit developer hosting plans; screen sharing uses additional plan resources. It has no recording, SFU, file transfer or shared playback.
 
-![Conference gallery with synthetic test participants](docs/screenshots/gallery.png)
+![VideoWhisper conference interface with AI-generated meeting participants](docs/screenshots/gallery-marketing.png)
+
+*Captured interface with AI-generated participant images for illustration.*
 
 ## Bring everyone into the same room
 
