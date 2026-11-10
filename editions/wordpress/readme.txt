@@ -4,7 +4,7 @@ Tags: video conference, webrtc, meetings, video chat
 Requires at least: 6.9
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 0.2.0
+Stable tag: 0.2.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -55,6 +55,9 @@ Yes, after an operator reviews and enables the additive /conference namespace. E
 No. Settings and meetings are retained on deactivation and deletion. Remove them deliberately through WordPress before deleting the plugin if desired.
 
 == Changelog ==
+
+= 0.2.1 =
+* Keep shared source/release editions synchronized with the PHP Unicode room-title fix.
 
 = 0.2.0 =
 * Add frontend conference URLs and Open conference links in the meeting list/editor.

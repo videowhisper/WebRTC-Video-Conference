@@ -81,3 +81,7 @@ test('theme defaults to system and narrow chat stays below the media without ove
  await page.setViewportSize({width:390,height:844});await open(page,'/','Narrow host',false);const panel=await page.locator('.vwc-panel').boundingBox(),stage=await page.locator('.vwc-stage').boundingBox();expect(panel.y).toBeGreaterThanOrEqual(stage.y+stage.height-1);expect(stage.height).toBeGreaterThan(180);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
  await page.getByRole('button',{name:'Theme: system. Switch to light.'}).click();await expect(page.locator('html')).toHaveAttribute('data-theme','light');await page.setViewportSize({width:320,height:640});await expect(page.getByRole('button',{name:'Leave',exact:true})).toBeInViewport();expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);await page.screenshot({path:'docs/screenshots/mobile.png'});
 });
+
+test('UTF-8 room titles survive creation and refresh without splitting characters',async({page})=>{
+ const title='A'+'ă'.repeat(40);await page.goto('/');const form=page.locator('form').filter({has:page.getByRole('button',{name:'Create meeting',exact:true})});await form.getByLabel('Room title').fill(title);await form.getByRole('checkbox').check();await form.getByRole('button').click();await expect(page.getByRole('heading',{name:title,exact:true})).toBeVisible();const url=page.url();await page.reload();expect(page.url()).toBe(url);await expect(page.getByRole('heading',{name:title,exact:true})).toBeVisible();
+});

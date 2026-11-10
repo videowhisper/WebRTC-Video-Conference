@@ -85,7 +85,8 @@ if ($ready) {
                     $access = ($_POST['access'] ?? '') === 'public' ? 'public' : 'private';
                     $accessKey = $access === 'private' ? bin2hex(random_bytes(32)) : '';
                     $title = trim((string) ($_POST['title'] ?? ''));
-                    $state['rooms'][$room] = ['expires' => $now + 3600, 'access' => $access, 'title' => substr($title ?: 'Video conference', 0, 80),
+                    $title = preg_match('/^.{1,80}/us', $title, $titleMatch) ? $titleMatch[0] : 'Video conference';
+                    $state['rooms'][$room] = ['expires' => $now + 3600, 'access' => $access, 'title' => $title,
                         'keyHash' => $accessKey ? hash('sha256', $accessKey) : '', 'members' => []];
                     $_SESSION['rooms'][$room] = ['key' => $accessKey]; $rate['count']++;
                     $state['rates'][$ip] = $rate;
@@ -137,7 +138,7 @@ $consent = 'I agree to connect to this site\'s configured signaling service. Oth
 ?>
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>VideoWhisper Video Conference</title><link rel="stylesheet" href="./assets/conference.css?v=<?php echo $e($assetVersion); ?>"><link rel="stylesheet" href="./setup.css?v=<?php echo $e($assetVersion); ?>"></head><body>
 <?php if ($config): ?>
-<div id="root"></div><script nonce="<?php echo $e($nonce); ?>">window.videowhisperConfig=<?php echo json_encode($config, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;</script><script type="module" src="./assets/conference.js?v=<?php echo $e($assetVersion); ?>"></script>
+<div id="root"></div><script nonce="<?php echo $e($nonce); ?>">window.videowhisperConfig=<?php echo json_encode($config, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_INVALID_UTF8_SUBSTITUTE); ?>;</script><script type="module" src="./assets/conference.js?v=<?php echo $e($assetVersion); ?>"></script>
 <?php else: ?>
 <main class="setup"><header class="setup-header"><a class="wordmark" href="<?php echo $e($base); ?>">VideoWhisper</a><button type="button" data-theme-toggle class="vwc-theme-toggle" aria-label="Theme: system. Switch to light." title="Theme: system. Switch to light."><span data-theme-icon aria-hidden="true">◐</span></button></header>
 <h1>Video Conference</h1><p>Meet on your site. Share one invitation to bring up to four people into the same room, with screen sharing and chat.</p>

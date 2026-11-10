@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: videowhisper-video-conference\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/videowhisper-"
 "video-conference\n"
-"POT-Creation-Date: 2026-11-10T16:21:11+00:00\n"
+"POT-Creation-Date: 2026-11-10T17:17:14+00:00\n"
 "PO-Revision-Date: 2026-11-10 16:00+0000\n"
 "Last-Translator: VideoWhisper.com <support@videowhisper.com>\n"
 "Language-Team: Romanian\n"
@@ -614,7 +614,7 @@ msgstr ""
 "Deschide această întâlnire pentru a te autentifica sau pentru a introduce "
 "cheia sa de acces privată."
 
-#: videowhisper-video-conference.php:64 videowhisper-video-conference.php:98
+#: videowhisper-video-conference.php:64 videowhisper-video-conference.php:99
 msgid "Ask the administrator to configure the conference server."
 msgstr "Cere administratorului să configureze serverul de conferințe."
 
@@ -622,6 +622,6 @@ msgstr "Cere administratorului să configureze serverul de conferințe."
 msgid "Video conference"
 msgstr "Conferință video"
 
-#: videowhisper-video-conference.php:95
+#: videowhisper-video-conference.php:96
 msgid "This meeting does not exist. Check the invitation link."
 msgstr "Această întâlnire nu există. Verifică linkul de invitație."

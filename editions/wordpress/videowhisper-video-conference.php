@@ -2,7 +2,7 @@
 /**
  * Plugin Name: VideoWhisper Video Conference
  * Description: Small group WebRTC video meetings with chat, screen sharing and a manually configured signaling server.
- * Version: 0.2.0
+ * Version: 0.2.1
  * Requires at least: 6.9
  * Requires PHP: 8.2
  * Author: VideoWhisper.com
@@ -13,7 +13,7 @@
  * Domain Path: /languages
  */
 if (!defined('ABSPATH')) exit;
-define('VWC_VERSION', '0.2.0');
+define('VWC_VERSION', '0.2.1');
 require_once __DIR__ . '/includes/tickets.php';
 
 function vwc_settings(): array { return (array) get_option('vwc_settings', []); }
