@@ -1,0 +1,627 @@
+# Translation of videowhisper-video-conference in Romanian
+# This file is distributed under the same license as the videowhisper-video-conference package.
+msgid ""
+msgstr ""
+"Project-Id-Version: videowhisper-video-conference\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/videowhisper-"
+"video-conference\n"
+"POT-Creation-Date: 2026-11-10T16:21:11+00:00\n"
+"PO-Revision-Date: 2026-11-10 16:00+0000\n"
+"Last-Translator: VideoWhisper.com <support@videowhisper.com>\n"
+"Language-Team: Romanian\n"
+"Language: ro_RO\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0 || (n%100>0 && "
+"n%100<20)) ? 1 : 2);\n"
+"X-Domain: videowhisper-video-conference\n"
+
+#. Plugin Name of the plugin
+#: videowhisper-video-conference.php:3
+msgid "VideoWhisper Video Conference"
+msgstr "VideoWhisper Video Conference"
+
+#. Description of the plugin
+#: videowhisper-video-conference.php:4
+msgid ""
+"Small group WebRTC video meetings with chat, screen sharing and a manually "
+"configured signaling server."
+msgstr ""
+"Întâlniri video WebRTC pentru grupuri mici, cu chat, partajarea ecranului și "
+"server de semnalizare configurat manual."
+
+#. Author of the plugin
+#: videowhisper-video-conference.php:8
+msgid "VideoWhisper.com"
+msgstr "VideoWhisper.com"
+
+#. Author URI of the plugin
+#: videowhisper-video-conference.php:9
+msgid "https://videowhisper.com/"
+msgstr "https://videowhisper.com/"
+
+#: includes/labels.php:6
+msgid "Anyone with this link can join this public room."
+msgstr "Oricine are acest link poate intra în această cameră publică."
+
+#: includes/labels.php:7
+msgid ""
+"Anyone with this private invitation can join. Keep its access key private."
+msgstr ""
+"Oricine are această invitație privată poate intra. Păstrează cheia de acces "
+"confidențială."
+
+#: includes/labels.php:8
+msgid "Ask the meeting owner for an invitation link."
+msgstr "Cere organizatorului un link de invitație."
+
+#: includes/labels.php:9
+msgid "Browser permission required"
+msgstr "Este necesară permisiunea browserului"
+
+#: includes/labels.php:10
+msgid ""
+"Camera or microphone unavailable. Allow browser access or join without media."
+msgstr ""
+"Camera sau microfonul nu este disponibil. Permite accesul în browser sau "
+"intră fără cameră și microfon."
+
+#: includes/labels.php:11
+msgid "Camera preview starts when you join."
+msgstr "Previzualizarea camerei începe când intri în întâlnire."
+
+#: includes/labels.php:12
+msgid "Chat"
+msgstr "Chat"
+
+#: includes/labels.php:13
+msgid "Close chat"
+msgstr "Închide chatul"
+
+#: includes/labels.php:14
+msgid "Close invitations"
+msgstr "Închide invitațiile"
+
+#: includes/labels.php:15
+msgid "Close people"
+msgstr "Închide lista participanților"
+
+#: includes/labels.php:16
+msgid "Conference error"
+msgstr "Eroare la conferință"
+
+#: includes/labels.php:17
+msgid "Conference not configured"
+msgstr "Conferința nu este configurată"
+
+#: includes/labels.php:18
+msgid "Connected"
+msgstr "Conectat"
+
+#: includes/labels.php:19
+msgid "Connecting"
+msgstr "Se conectează"
+
+#: includes/labels.php:20
+msgid "Connection failed. Check your server settings or reload to retry."
+msgstr ""
+"Conectarea a eșuat. Verifică setările serverului sau reîncarcă pagina pentru "
+"a reîncerca."
+
+#: includes/labels.php:21
+msgid "Copy invitation link"
+msgstr "Copiază linkul de invitație"
+
+#: includes/labels.php:22
+msgid "Display name"
+msgstr "Nume afișat"
+
+#: includes/labels.php:23
+msgid "Enter a message of up to 2000 characters."
+msgstr "Introdu un mesaj de cel mult 2000 de caractere."
+
+#: includes/labels.php:24
+msgid "Gallery"
+msgstr "Galerie"
+
+#: includes/labels.php:25
+msgid "Guest"
+msgstr "Vizitator"
+
+#: includes/labels.php:26
+msgid "Hand raised"
+msgstr "Mână ridicată"
+
+#: includes/labels.php:27
+msgid "Host"
+msgstr "Gazdă"
+
+#: includes/labels.php:28
+msgid ""
+"I agree to connect to the configured signaling service and share media with "
+"participants when enabled."
+msgstr ""
+
+#: includes/labels.php:29 includes/meetings.php:77
+msgid "Invitation link"
+msgstr "Link de invitație"
+
+#: includes/labels.php:30
+msgid "Invitation link copied."
+msgstr "Linkul de invitație a fost copiat."
+
+#: includes/labels.php:31
+msgid "Invitation shared."
+msgstr "Invitația a fost partajată."
+
+#: includes/labels.php:32
+msgid "Invite"
+msgstr "Invită"
+
+#: includes/labels.php:33
+msgid "Invite participants"
+msgstr "Invită participanți"
+
+#: includes/labels.php:34
+msgid "Join meeting"
+msgstr "Intră în întâlnire"
+
+#: includes/labels.php:35
+msgid "Join the meeting before continuing."
+msgstr "Intră în întâlnire înainte de a continua."
+
+#: includes/labels.php:36
+msgid "Joining meeting…"
+msgstr "Se intră în întâlnire…"
+
+#: includes/labels.php:37
+msgid "Leave"
+msgstr "Ieși"
+
+#: includes/labels.php:38
+msgid "Loading meeting"
+msgstr "Se încarcă întâlnirea"
+
+#: includes/labels.php:39
+msgid "Lock meeting"
+msgstr "Blochează întâlnirea"
+
+#: includes/labels.php:40
+msgid "Lower hand"
+msgstr "Coboară mâna"
+
+#: includes/labels.php:41
+msgid "Media connection failed. Leave and rejoin to retry."
+msgstr "Conexiunea media a eșuat. Ieși și intră din nou pentru a reîncerca."
+
+#: includes/labels.php:42
+msgid "Media signaling was rejected."
+msgstr "Semnalizarea media a fost refuzată."
+
+#: includes/labels.php:43
+msgid "Message"
+msgstr "Mesaj"
+
+#: includes/labels.php:44
+msgid "Mute all guests"
+msgstr "Dezactivează sunetul tuturor vizitatorilor"
+
+#: includes/labels.php:45
+msgid "Mute microphone"
+msgstr "Dezactivează microfonul"
+
+#: includes/labels.php:46
+msgid "Offline"
+msgstr "Deconectat"
+
+#: includes/labels.php:47
+msgid ""
+"Open the same invitation in another browser or send it to your participants. "
+"Creating another room starts a separate meeting."
+msgstr ""
+"Deschide aceeași invitație în alt browser sau trimite-o participanților. "
+"Crearea altei camere pornește o întâlnire separată."
+
+#: includes/labels.php:48
+msgid "Participant"
+msgstr "Participant"
+
+#: includes/labels.php:49
+msgid "Participants must sign in on this site before joining."
+msgstr ""
+"Participanții trebuie să se autentifice pe acest site înainte de a intra."
+
+#: includes/labels.php:50
+msgid "People"
+msgstr "Participanți"
+
+#: includes/labels.php:51
+msgid "Pin"
+msgstr "Fixează"
+
+#: includes/labels.php:52
+msgid "Preparing VideoWhisper conference configuration."
+msgstr "Se pregătește configurația conferinței VideoWhisper."
+
+#: includes/labels.php:53
+msgid "Private room · invitation required"
+msgstr "Cameră privată · invitație necesară"
+
+#: includes/labels.php:54
+msgid "Public room"
+msgstr "Cameră publică"
+
+#: includes/labels.php:55
+msgid "Publishing this stream is not permitted."
+msgstr "Publicarea acestei transmisii nu este permisă."
+
+#: includes/labels.php:56
+msgid "Raise hand"
+msgstr "Ridică mâna"
+
+#: includes/labels.php:57
+msgid "Reconnecting to the meeting…"
+msgstr "Se reconectează la întâlnire…"
+
+#: includes/labels.php:58
+msgid "Remove"
+msgstr "Elimină"
+
+#: includes/labels.php:59
+msgid "Request mute"
+msgstr "Solicită dezactivarea microfonului"
+
+#: includes/labels.php:60
+msgid "Screen"
+msgstr "Ecran"
+
+#: includes/labels.php:61
+msgid "Screen sharing was cancelled or unavailable."
+msgstr "Partajarea ecranului a fost anulată sau nu este disponibilă."
+
+#: includes/labels.php:62
+msgid "Select and copy the invitation link below."
+msgstr "Selectează și copiază linkul de invitație de mai jos."
+
+#: includes/labels.php:63
+msgid "Send message"
+msgstr "Trimite mesajul"
+
+#: includes/labels.php:64
+msgid "Session ended. Reload the page to rejoin."
+msgstr "Sesiunea s-a încheiat. Reîncarcă pagina pentru a intra din nou."
+
+#: includes/labels.php:65
+msgid "Share invitation"
+msgstr "Partajează invitația"
+
+#: includes/labels.php:66
+msgid "Share screen"
+msgstr "Partajează ecranul"
+
+#: includes/labels.php:67
+msgid "Sharing cancelled. You can copy the link instead."
+msgstr "Partajarea a fost anulată. Poți copia linkul."
+
+#: includes/labels.php:68
+msgid "Sign-in required"
+msgstr "Autentificare necesară"
+
+#: includes/labels.php:69
+msgid "Small group mesh (up to four participants)"
+msgstr "Grup mic în rețea mesh (cel mult patru participanți)"
+
+#: includes/labels.php:70
+msgid "Speaker"
+msgstr "Vorbitor"
+
+#: includes/labels.php:71
+msgid "Spotlight"
+msgstr "Evidențiază"
+
+#: includes/labels.php:72
+msgid "Start camera"
+msgstr "Pornește camera"
+
+#: includes/labels.php:73
+msgid "Stop camera"
+msgstr "Oprește camera"
+
+#: includes/labels.php:74
+msgid "Stop sharing"
+msgstr "Oprește partajarea"
+
+#: includes/labels.php:75
+msgid "System"
+msgstr "Sistem"
+
+#: includes/labels.php:76
+msgid "The configured server plan cannot publish this stream."
+msgstr "Planul serverului configurat nu permite publicarea acestei transmisii."
+
+#: includes/labels.php:77
+msgid "The media signaling request is invalid."
+msgstr "Cererea de semnalizare media nu este validă."
+
+#: includes/labels.php:78
+msgid "The meeting request is invalid."
+msgstr "Cererea pentru întâlnire nu este validă."
+
+#: includes/labels.php:79
+msgid "Theme: dark. Switch to system."
+msgstr "Temă: întunecată. Treci la setarea sistemului."
+
+#: includes/labels.php:80
+msgid "Theme: light. Switch to dark."
+msgstr "Temă: luminoasă. Treci la tema întunecată."
+
+#: includes/labels.php:81
+msgid "Theme: system. Switch to light."
+msgstr "Temă: sistem. Treci la tema luminoasă."
+
+#: includes/labels.php:82
+msgid "This action requires a host."
+msgstr "Această acțiune necesită o gazdă."
+
+#: includes/labels.php:83
+msgid "This browser session is already in the meeting."
+msgstr "Această sesiune de browser este deja în întâlnire."
+
+#: includes/labels.php:84
+msgid "This meeting is full."
+msgstr "Întâlnirea a atins numărul maxim de participanți."
+
+#: includes/labels.php:85
+msgid "This meeting is locked."
+msgstr "Întâlnirea este blocată."
+
+#: includes/labels.php:86
+msgid "This server needs the conference extension."
+msgstr "Acest server necesită extensia pentru conferințe."
+
+#: includes/labels.php:87
+msgid "Too many requests. Please wait."
+msgstr "Prea multe cereri. Așteaptă puțin."
+
+#: includes/labels.php:88
+msgid "Unknown status."
+msgstr "Stare necunoscută."
+
+#: includes/labels.php:89
+msgid "Unlock meeting"
+msgstr "Deblochează întâlnirea"
+
+#: includes/labels.php:90
+msgid "Unmute microphone"
+msgstr "Activează microfonul"
+
+#: includes/labels.php:91
+msgid "Use camera and microphone"
+msgstr "Folosește camera și microfonul"
+
+#: includes/labels.php:92
+msgid "Video meeting"
+msgstr "Întâlnire video"
+
+#: includes/labels.php:93
+msgid "You cannot join this meeting."
+msgstr "Nu poți intra în această întâlnire."
+
+#: includes/labels.php:94
+msgid "You were removed from this meeting."
+msgstr "Ai fost eliminat din această întâlnire."
+
+#: includes/labels.php:95
+msgid "Your hand is raised."
+msgstr "Ai mâna ridicată."
+
+#: includes/labels.php:96
+msgid "Your screen"
+msgstr "Ecranul tău"
+
+#: includes/labels.php:97
+msgid "Your session expired. Reload the page to rejoin."
+msgstr "Sesiunea ta a expirat. Reîncarcă pagina pentru a intra din nou."
+
+#: includes/labels.php:98
+msgid "hand raised"
+msgstr "mână ridicată"
+
+#: includes/labels.php:99
+msgid "locked"
+msgstr "blocată"
+
+#: includes/meetings.php:33
+msgid "Video Conferences"
+msgstr "Conferințe video"
+
+#: includes/meetings.php:33
+msgid "Video Conference"
+msgstr "Conferință video"
+
+#: includes/meetings.php:34
+msgid "Add Video Conference"
+msgstr "Adaugă o conferință video"
+
+#: includes/meetings.php:63 includes/meetings.php:76
+#: videowhisper-video-conference.php:61
+msgid "Open conference"
+msgstr "Deschide conferința"
+
+#: includes/meetings.php:68
+msgid "Meeting access and invitations"
+msgstr "Acces la întâlnire și invitații"
+
+#: includes/meetings.php:70
+msgid "Who can join?"
+msgstr "Cine poate intra?"
+
+#: includes/meetings.php:71
+msgid "Signed-in members"
+msgstr "Membri autentificați"
+
+#: includes/meetings.php:71
+msgid "Private — invitation with access key"
+msgstr "Privată — invitație cu cheie de acces"
+
+#: includes/meetings.php:71
+msgid "Public — anyone with the room URL"
+msgstr "Publică — oricine are URL-ul camerei"
+
+#: includes/meetings.php:74
+msgid ""
+"Meeting editors are hosts. Private invitations allow guests with the "
+"complete link; treat the access key as confidential. Existing meetings keep "
+"their access setting."
+msgstr ""
+"Utilizatorii care pot edita întâlnirea sunt gazde. Invitațiile private "
+"permit accesul vizitatorilor cu linkul complet; păstrează cheia de acces "
+"confidențială. Întâlnirile existente își păstrează setarea de acces."
+
+#: includes/meetings.php:78
+msgid "Publish the meeting to open it and share its invitation."
+msgstr "Publică întâlnirea pentru a o deschide și a partaja invitația."
+
+#: includes/meetings.php:79
+msgid ""
+"Replace the private access key when saving. Previous invitations stop "
+"working for new connections."
+msgstr ""
+"Înlocuiește cheia de acces privată la salvare. Invitațiile anterioare nu vor "
+"mai funcționa pentru conexiuni noi."
+
+#: includes/meetings.php:80
+msgid "Optional shortcode for another page:"
+msgstr "Scurtcod opțional pentru altă pagină:"
+
+#: includes/meetings.php:98
+msgid "Join conference"
+msgstr "Intră în conferință"
+
+#: includes/meetings.php:99
+msgid "This meeting is not published. Ask its owner to publish it first."
+msgstr ""
+"Această întâlnire nu este publicată. Cere organizatorului să o publice mai "
+"întâi."
+
+#: includes/meetings.php:100
+msgid ""
+"This meeting requires a site account. Sign in, then open the invitation "
+"again."
+msgstr ""
+"Această întâlnire necesită un cont pe site. Autentifică-te, apoi deschide "
+"din nou invitația."
+
+#: includes/meetings.php:100
+msgid "Sign in to join"
+msgstr "Autentifică-te pentru a intra"
+
+#: includes/meetings.php:101
+msgid ""
+"This private room requires its access key. Open the complete invitation or "
+"enter the key from the meeting owner."
+msgstr ""
+"Această cameră privată necesită cheia sa de acces. Deschide invitația "
+"completă sau introdu cheia primită de la organizator."
+
+#: includes/meetings.php:104
+msgid "Access key"
+msgstr "Cheie de acces"
+
+#: includes/meetings.php:104
+msgid "Open meeting"
+msgstr "Deschide întâlnirea"
+
+#: videowhisper-video-conference.php:23 videowhisper-video-conference.php:66
+msgid "Conference settings"
+msgstr "Setări conferință"
+
+#: videowhisper-video-conference.php:23
+msgid "Settings"
+msgstr "Setări"
+
+#: videowhisper-video-conference.php:32
+msgid ""
+"Enter an HTTPS signaling server origin, without credentials, a query or a "
+"fragment."
+msgstr ""
+"Introdu originea HTTPS a serverului de semnalizare, fără date de "
+"autentificare, parametri de interogare sau fragment."
+
+#: videowhisper-video-conference.php:45
+msgid "Video Conference settings"
+msgstr "Setări pentru conferința video"
+
+#: videowhisper-video-conference.php:47
+msgid ""
+"Configure a dedicated VideoWhisper server account with the conference "
+"extension enabled. Manual setup does not register an account or contact the "
+"CRM."
+msgstr ""
+"Configurează un cont dedicat pe serverul VideoWhisper, cu extensia pentru "
+"conferințe activată. Configurarea manuală nu înregistrează un cont și nu "
+"contactează CRM-ul."
+
+#: videowhisper-video-conference.php:49
+msgid "Signaling server origin"
+msgstr "Originea serverului de semnalizare"
+
+#: videowhisper-video-conference.php:49
+msgid "Account name"
+msgstr "Numele contului"
+
+#: videowhisper-video-conference.php:49
+msgid "Account token (leave blank to retain)"
+msgstr "Tokenul contului (lasă gol pentru a-l păstra)"
+
+#: videowhisper-video-conference.php:52
+msgid "Server callback"
+msgstr "Callback pentru server"
+
+#: videowhisper-video-conference.php:53
+msgid ""
+"Set this URL as loginURL for a dedicated server account. Do not replace "
+"callbacks belonging to another plugin. The token stays on the server; "
+"browsers receive expiring room credentials."
+msgstr ""
+"Setează acest URL ca loginURL pentru un cont dedicat pe server. Nu înlocui "
+"callbackurile altui modul. Tokenul rămâne pe server; browserele primesc date "
+"de acces la cameră cu termen de expirare."
+
+#: videowhisper-video-conference.php:54
+msgid ""
+"Create and publish a Video Conference, choose its access setting, then use "
+"Open conference and Invite. A shortcode is optional. Check the provider "
+"terms and privacy policy before enabling meetings."
+msgstr ""
+"Creează și publică o conferință video, alege setarea de acces, apoi "
+"folosește Deschide conferința și Invită. Scurtcodul este opțional. Verifică "
+"termenii furnizorului și politica de confidențialitate înainte de a activa "
+"întâlnirile."
+
+#: videowhisper-video-conference.php:55
+msgid "Optional managed hosting"
+msgstr "Găzduire administrată opțională"
+
+#: videowhisper-video-conference.php:55
+msgid "Setup help"
+msgstr "Ajutor pentru configurare"
+
+#: videowhisper-video-conference.php:61
+msgid "Open this meeting to sign in or enter its private access key."
+msgstr ""
+"Deschide această întâlnire pentru a te autentifica sau pentru a introduce "
+"cheia sa de acces privată."
+
+#: videowhisper-video-conference.php:64 videowhisper-video-conference.php:98
+msgid "Ask the administrator to configure the conference server."
+msgstr "Cere administratorului să configureze serverul de conferințe."
+
+#: videowhisper-video-conference.php:72
+msgid "Video conference"
+msgstr "Conferință video"
+
+#: videowhisper-video-conference.php:95
+msgid "This meeting does not exist. Check the invitation link."
+msgstr "Această întâlnire nu există. Verifică linkul de invitație."

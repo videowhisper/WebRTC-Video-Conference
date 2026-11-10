@@ -1,0 +1,15 @@
+node_modules/
+dist/
+release/
+test-results/
+playwright-report/
+public/config.json
+public/login.json
+.env*
+.vscode/
+.DS_Store
+server-review/baseline/
+server-review/proposed/server.js
+editions/php/assets/
+
+dist-wordpress/

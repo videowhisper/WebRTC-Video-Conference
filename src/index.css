@@ -1,0 +1,83 @@
+@import "tailwindcss" source(none);
+@source "./";
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: var(--vwc-bg);
+  color: var(--vwc-text);
+}
+
+button,
+input {
+  font: inherit;
+}
+
+video {
+  background: #09090b;
+}
+
+
+:root { color-scheme: light; --vwc-bg:#eef3f7; --vwc-surface:#fff; --vwc-muted:#f1f5f9; --vwc-text:#14202e; --vwc-secondary:#475569; --vwc-border:#cbd5e1; --vwc-accent:#087e8b; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { color-scheme:dark; --vwc-bg:#101316; --vwc-surface:#11151b; --vwc-muted:#232a33; --vwc-text:#f4f4f5; --vwc-secondary:#aeb9c8; --vwc-border:#374151; --vwc-accent:#67e8f9; } }
+:root[data-theme="dark"] { color-scheme:dark; --vwc-bg:#101316; --vwc-surface:#11151b; --vwc-muted:#232a33; --vwc-text:#f4f4f5; --vwc-secondary:#aeb9c8; --vwc-border:#374151; --vwc-accent:#67e8f9; }
+.vwc-background { background:var(--vwc-bg); }
+.vwc-surface { background:var(--vwc-surface); }
+.vwc-muted-surface { background:var(--vwc-muted); }
+.vwc-text { color:var(--vwc-text); }
+.vwc-secondary { color:var(--vwc-secondary); }
+.vwc-border { border-color:var(--vwc-border); }
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible { outline:2px solid var(--vwc-accent); outline-offset:3px; }
+.vwc-app button { flex-shrink:0; }
+.vwc-theme-toggle, .vwc-invite-button { display:inline-flex; align-items:center; justify-content:center; gap:.45rem; border:1px solid var(--vwc-border); background:var(--vwc-surface); color:var(--vwc-text); border-radius:.5rem; padding:.5rem; cursor:pointer; }
+.vwc-meeting { height:100vh; height:100dvh; min-height:32rem; overflow:hidden; }
+.vwc-meeting-header { min-height:3.5rem; gap:.5rem; flex-wrap:wrap; padding-block:.4rem; }
+.vwc-header-actions { flex-wrap:wrap; justify-content:flex-end; }
+.vwc-workspace { display:flex; flex:1; min-height:0; }
+.vwc-stage { display:flex; flex-direction:column; flex:1; min-width:0; min-height:0; }
+.vwc-tile { min-width:0; height:100%; color:white; }
+.vwc-compact-tile { min-width:8rem; aspect-ratio:16/9; }
+.vwc-controls { flex:none; padding-block:.5rem; }
+.vwc-control-buttons { flex-wrap:wrap; justify-content:center; border-radius:1.4rem; gap:.4rem; }
+.vwc-panel { width:clamp(16rem,30vw,22rem); flex:none; min-height:0; min-width:0; border-inline-start:1px solid var(--vwc-border); background:var(--vwc-surface); color:var(--vwc-text); overflow:hidden; }
+.vwc-panel p { overflow-wrap:anywhere; }
+.vwc-invite { display:flex; flex-direction:column; }
+.vwc-invite header { display:flex; align-items:center; justify-content:space-between; gap:1rem; min-height:3rem; padding:.7rem 1rem; border-bottom:1px solid var(--vwc-border); }
+.vwc-invite header button { padding:.25rem; }
+.vwc-panel-content { overflow-y:auto; padding:1rem; display:flex; flex-direction:column; gap:1rem; font-size:.875rem; }
+.vwc-panel-content input { min-width:0; width:100%; border:1px solid var(--vwc-border); border-radius:.4rem; padding:.65rem; background:var(--vwc-bg); color:var(--vwc-text); }
+.vwc-panel-content button { display:flex; align-items:center; justify-content:center; gap:.5rem; padding:.7rem; border:1px solid var(--vwc-border); border-radius:.4rem; }
+.vwc-primary { background:#67e8f9; color:#082f49; font-weight:600; }
+.vwc-hand-badge { position:absolute; inset-inline-end:.5rem; top:.5rem; display:flex; gap:.4rem; align-items:center; background:#fcd34d; color:#422006; padding:.35rem .5rem; border-radius:.4rem; font-size:.75rem; }
+@media (max-width: 899px) {
+ .vwc-workspace { flex-direction:column; }
+ .vwc-panel { width:100%; height:35dvh; min-height:10rem; max-height:22rem; border-inline-start:0; border-top:1px solid var(--vwc-border); }
+ .vwc-stage { min-height:11rem; }
+ .vwc-preview { min-height:30vh; }
+ .vwc-lobby > div { min-height:100dvh; }
+ .vwc-meeting-header { padding-inline:.6rem; }
+ .vwc-header-actions { gap:.3rem; }
+ .vwc-invite-button { font-size:.8rem; }
+ .vwc-media-grid { padding:.5rem; }
+}
+
+.vwc-access-page { max-width:40rem; margin:3rem auto; padding:1.5rem; font:1rem/1.7 system-ui; color:var(--vwc-text); }
+.vwc-access-page h1 { font-size:2rem; font-weight:700; }
+.vwc-access-page a { color:var(--vwc-accent); }
+.vwc-access-page form { display:flex; flex-direction:column; gap:1rem; margin-block:1.5rem; }
+.vwc-access-page input { padding:.75rem; border:1px solid var(--vwc-border); border-radius:.4rem; }
+.vwc-access-page button { background:#67e8f9; color:#082f49; padding:.75rem; border-radius:.4rem; }
+
+.vwc-invite-inline { margin-bottom:1.25rem; border:1px solid var(--vwc-border); border-radius:.5rem; min-width:0; }
+.vwc-invite-inline .vwc-panel-content { padding:.75rem; font-size:.8rem; gap:.65rem; }
+.vwc-invite-inline header { min-height:2.5rem; padding:.5rem .75rem; font-size:.875rem; }

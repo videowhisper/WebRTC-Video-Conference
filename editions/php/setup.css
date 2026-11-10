@@ -1,0 +1,21 @@
+.setup { max-width:68rem; margin:0 auto; padding:clamp(1rem,4vw,3rem); color:var(--vwc-text); font:16px/1.65 system-ui; }
+.setup-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem; }
+.setup .wordmark { font-weight:800; letter-spacing:.03em; text-decoration:none; }
+.setup h1 { font-size:clamp(2rem,6vw,3.5rem); line-height:1.1; font-weight:750; margin-bottom:1rem; }
+.setup h2 { font-size:1.3rem; font-weight:650; margin-bottom:.7rem; }
+.setup p { margin-bottom:1rem; color:var(--vwc-secondary); }
+.setup a { color:var(--vwc-accent); }
+.setup-columns { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1rem; }
+.setup-card { border:1px solid var(--vwc-border); border-radius:.8rem; background:var(--vwc-surface); padding:clamp(1rem,3vw,1.7rem); margin-block:1rem; }
+.setup form { display:flex; flex-direction:column; gap:1rem; }
+.setup label { display:flex; flex-direction:column; gap:.35rem; font-weight:500; }
+.setup input:not([type=checkbox]), .setup select { width:100%; min-width:0; padding:.65rem; border:1px solid var(--vwc-border); background:var(--vwc-bg); border-radius:.4rem; color:var(--vwc-text); }
+.setup .consent { flex-direction:row; align-items:flex-start; font-size:.8rem; font-weight:400; color:var(--vwc-secondary); gap:.6rem; }
+.setup .consent input { margin-top:.4rem; flex:none; }
+.setup button[type=submit] { padding:.8rem 1.3rem; background:#67e8f9; color:#082f49; border:0; border-radius:.4rem; font-weight:650; cursor:pointer; align-self:flex-start; }
+.setup .setup-error { padding:1rem; border:1px solid #e11d48; border-radius:.4rem; color:#e11d48; }
+.public-rooms { list-style:none; padding:0; }
+.public-rooms li { display:flex; gap:1rem; justify-content:space-between; padding-block:.65rem; border-bottom:1px solid var(--vwc-border); overflow-wrap:anywhere; }
+.public-rooms span { flex:none; color:var(--vwc-secondary); }
+.setup footer { margin-top:2rem; font-size:.875rem; }
+@media(max-width:700px) { .setup-columns { grid-template-columns:1fr; gap:0; } }

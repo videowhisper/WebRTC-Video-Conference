@@ -1,0 +1,3 @@
+# Client source
+
+Source and lockfile are in source/. With Node.js 22+: `cd source && npm ci && npm run build`. Copy dist-wordpress/assets/* to ../assets/. This build uses the WordPress wp-element script dependency instead of bundling another React renderer. The standalone PHP edition uses the same source with its self-contained build. No remote executable assets are loaded. PHP ticket source: includes/tickets.php. Canonical client source and build instructions: https://github.com/videowhisper/WebRTC-Video-Conference .
