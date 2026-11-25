@@ -70,9 +70,14 @@ The plugin is internationalized with the videowhisper-video-conference text doma
 
 = Source and build =
 
-The readable client, dependency lockfile and build tools are maintained in https://github.com/videowhisper/WebRTC-Video-Conference . Distributed plugin packages link their exact corresponding source commit and compiled-asset SHA256 hashes here. This source-preparation commit precedes the release metadata pin.
+The exact human-readable client source, dependency lockfile and build tools for this release are available at:
+https://github.com/videowhisper/WebRTC-Video-Conference/tree/7fd7953ed59d15c61976fad432202fc8eaa5bf73
 
-With Node.js22+, run npm ci and npm run build from the repository root. WordPress outputs are dist-wordpress/assets/conference.js and conference.css. PHP source is included directly in this edition. Runtime packages exclude development source, tests and translation catalogs.
+With Node.js22+ and Python3, run npm ci and npm run build from that source tree. WordPress outputs are dist-wordpress/assets/conference.js and conference.css; copy them to this plugin's assets directory. PHP source is included directly in this plugin. Installed packages exclude development source, tests and translation catalogs.
+
+SHA256 of the WordPress browser assets:
+conference.js: 4cad2c16465a2f75da7e363620ddc098c46e9c34c9cf59e48d77ad8c8bb7287d
+conference.css: ad5f49845bfaf44f675711adfd5ace25da1f29ae50f218957a7dcb1bdabf68b0
 
  React is supplied by WordPress core through wp-element; it is not bundled a second time. PHP source is included directly in this plugin. No runtime executable assets are downloaded from GitHub or another CDN.
 

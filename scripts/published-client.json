@@ -1,8 +1,8 @@
 {
-  "ref": "3fb2112b71cca276c01b9d9ed3d54a8386aa3296",
-  "url": "https://github.com/videowhisper/WebRTC-Video-Conference/tree/3fb2112b71cca276c01b9d9ed3d54a8386aa3296",
+  "ref": "7fd7953ed59d15c61976fad432202fc8eaa5bf73",
+  "url": "https://github.com/videowhisper/WebRTC-Video-Conference/tree/7fd7953ed59d15c61976fad432202fc8eaa5bf73",
   "assets": {
-    "conference.js": "d4702a62822db188cf7f7f9028d227a3deb5ee0b401d64954df1d7b00444ced8",
-    "conference.css": "dae8b880f9f9462e5d7c594bdb75dc093d307738dc3c08af7d6b40cfc84b3ca0"
+    "conference.js": "4cad2c16465a2f75da7e363620ddc098c46e9c34c9cf59e48d77ad8c8bb7287d",
+    "conference.css": "ad5f49845bfaf44f675711adfd5ace25da1f29ae50f218957a7dcb1bdabf68b0"
   }
 }
