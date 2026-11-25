@@ -4,6 +4,7 @@ import { Clock, Lock, Users, Share2 } from 'lucide-react';
 import useConferenceStore from '../store/useConferenceStore';
 import VideoTile from './VideoTile';
 import Controls from './Controls';
+import DevicePanel from './DevicePanel';
 import InvitePanel from './InvitePanel';
 import ThemeToggle from './ThemeToggle';
 import ChatPanel from './ChatPanel';
@@ -90,14 +91,14 @@ export default function Meeting({
 
         <div className="vwc-header-actions flex items-center gap-2">
           <ThemeToggle />
-          <button type="button" className="vwc-invite-button" onClick={() => setUi({ inviteOpen: !ui.inviteOpen, chatOpen: false, peopleOpen: false })}><Share2 size={16} />{t("Invite")}</button>
+          <button type="button" className="vwc-invite-button" onClick={() => setUi({ inviteOpen: !ui.inviteOpen, chatOpen: false, peopleOpen: false, deviceOpen: false })}><Share2 size={16} />{t("Invite")}</button>
           <button type="button" onClick={() => setUi({
           layout: ui.layout === 'speaker' ? 'gallery' : 'speaker'
         })} className="rounded-md border vwc-border vwc-muted-surface px-3 py-1.5 text-xs vwc-text transition hover:bg-white/10">
             {ui.layout === 'speaker' ? t("Gallery") : t("Speaker")}
           </button>
           <button type="button" onClick={() => setUi({
-          peopleOpen: !ui.peopleOpen, chatOpen: false, inviteOpen: false
+          peopleOpen: !ui.peopleOpen, chatOpen: false, inviteOpen: false, deviceOpen: false
         })} className="inline-flex items-center gap-2 rounded-md border vwc-border vwc-muted-surface px-3 py-1.5 text-xs vwc-text transition hover:bg-white/10">
             <Users className="h-4 w-4" />
             {participants.length}
@@ -129,6 +130,7 @@ export default function Meeting({
           <Controls conference={conference} />
         </div>
 
+        {ui.deviceOpen && <DevicePanel conference={conference} />}
         {ui.inviteOpen && <InvitePanel />}
         {ui.chatOpen && !ui.inviteOpen && <ChatPanel conference={conference} />}
         {ui.peopleOpen && !ui.chatOpen && !ui.inviteOpen && <ParticipantsPanel conference={conference} />}

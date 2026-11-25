@@ -1,0 +1,342 @@
+<?php
+/** Generated streaming account client v1; source wordpress/tools/streaming-connect, revision {{REVISION}}. */
+namespace {{NAMESPACE}}\StreamingConnect;
+defined( 'ABSPATH' ) || exit;
+
+/** Optional CRM onboarding; neither this connection nor a plan label grants meeting access. */
+final class Connection {
+    private static array $adapter = array();
+    public static function boot( array $adapter ): void {
+        self::$adapter = $adapter;
+        add_action( 'admin_enqueue_scripts', static function () {
+            if ( ! current_user_can( 'manage_options' ) ) return;
+            $query = array(); wp_parse_str( wp_parse_url( self::$adapter['page'], PHP_URL_QUERY ) ?? '', $query );
+            // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only selection of this product's settings stylesheet.
+            $page = isset( $_GET['page'] ) && is_string( $_GET['page'] ) ? sanitize_key( wp_unslash( $_GET['page'] ) ) : '';
+            if ( $page === ( $query['page'] ?? '' ) ) wp_enqueue_style( self::$adapter['slug'] . '-streaming-connect', plugins_url( 'class-streaming-connect.css', __FILE__ ), array(), '{{REVISION}}' );
+        } );
+        add_action( 'admin_post_' . $adapter['action'], array( __CLASS__, 'post' ) );
+        add_action( 'rest_api_init', array( __CLASS__, 'register_proof' ), 20 );
+        add_filter( 'rest_dispatch_request', static function ( $result, $request, $route ) {
+            return null === $result && '/videowhisper-streaming-connect/v1/proof' === $route && 'POST' === $request->get_method() && self::$adapter['slug'] === $request->get_param('plugin') ? self::proof( $request ) : $result;
+        }, 10, 3 );
+    }
+    private static function key(): string { return self::$adapter['option'] . '_' . get_current_blog_id() . '_' . get_current_user_id(); }
+    private static function state(): array {
+        $value = get_option( self::key(), array() );
+        return is_array( $value ) ? $value : array();
+    }
+    private static function save( array $state ): void { update_option( self::key(), $state, false ); }
+    private static function provider(): string { return 'https://consult.videowhisper.com'; }
+    private static function failure(): \RuntimeException { return new \RuntimeException( 'connection_request_failed' ); }
+    private static function text( array $input, string $key, int $max = 200 ): string {
+        $value = $input[ $key ] ?? '';
+        if ( ! is_string( $value ) || strlen( $value ) > $max ) throw self::failure();
+        return sanitize_text_field( $value );
+    }
+    /** Credentials remain server-side and may only be sent to the fixed HTTPS CRM origin. */
+    private static function request( string $operation, array $body = array() ): array {
+        if ( ! in_array( $operation, array( 'config', 'register', 'login', 'confirm', 'accounts', 'account_new', 'settings', 'callback-capabilities', 'callback-provision' ), true ) ) throw self::failure();
+        $url = self::provider() . '/wp-json/video-live-support/v1/remote/' . $operation;
+        $args = array( 'timeout' => 20, 'redirection' => 0, 'limit_response_size' => 262144, 'headers' => array( 'Content-Type' => 'application/json', 'Referer' => home_url( '/' ) ) );
+        if ( in_array( $operation, array( 'config', 'callback-capabilities' ), true ) ) $response = wp_safe_remote_get( $url, $args );
+        else {
+            $body['client_plugin'] = self::$adapter['slug'];
+            $body['client_site_url'] = home_url( '/' );
+            $args['body'] = wp_json_encode( $body );
+            $response = wp_safe_remote_post( $url, $args );
+        }
+        if ( is_wp_error( $response ) || 200 !== wp_remote_retrieve_response_code( $response ) ) throw self::failure();
+        $data = json_decode( wp_remote_retrieve_body( $response ), true );
+        if ( ! is_array( $data ) || isset( $data['error'] ) || isset( $data['code'] ) ) throw self::failure();
+        return $data;
+    }
+    private static function credentials( array $state ): array {
+        if ( empty( $state['consent'] ) || ! is_int( $state['contact_id'] ?? null ) || $state['contact_id'] < 1 ||
+            ! is_string( $state['remote_token'] ?? null ) || ! preg_match( '/\A[A-Za-z0-9_.-]{20,512}\z/', $state['remote_token'] ) ||
+            ! is_int( $state['expires'] ?? null ) || $state['expires'] <= time() ) throw self::failure();
+        return array( 'contact_id' => $state['contact_id'], 'remote_token' => $state['remote_token'] );
+    }
+    private static function form_config( $data ): array {
+        if ( ! is_array( $data ) || ! is_array( $data['form'] ?? null ) || ! is_array( $data['fields'] ?? null ) || count( $data['fields'] ) > 60 ) throw self::failure();
+        $form = array( 'fields' => array() );
+        foreach ( array( 'name', 'instructions', 'terms', 'termsUrl' ) as $key ) {
+            $v = $data['form'][ $key ] ?? '';
+            if ( ! is_string( $v ) || strlen( $v ) > 8000 ) throw self::failure();
+            $form[ $key ] = 'termsUrl' === $key ? esc_url_raw( $v, array( 'https' ) ) : wp_strip_all_tags( $v );
+        }
+        foreach ( $data['fields'] as $field ) {
+            if ( ! is_array( $field ) || ! is_string( $field['name'] ?? null ) || strlen( $field['name'] ) > 100 || '' === $field['name'] || preg_match( '/[\x00-\x1f\x7f\[\]]/', $field['name'] ) ||
+                isset( $form['fields'][ $field['name'] ] ) || ! in_array( $field['type'] ?? 'text', array( 'text', 'textarea', 'select', 'multiselect', 'toggle', 'email', 'url' ), true ) ) throw self::failure();
+            $options = $field['options'] ?? array();
+            if ( ! is_array( $options ) || count( $options ) > 100 ) throw self::failure();
+            foreach ( $options as $option ) if ( ! is_string( $option ) || strlen( $option ) > 500 ) throw self::failure();
+            $instructions = $field['instructions'] ?? '';
+            $placeholder = $field['placeholder'] ?? '';
+            if ( ! is_string( $instructions ) || strlen( $instructions ) > 2000 || ! is_string( $placeholder ) || strlen( $placeholder ) > 500 ) throw self::failure();
+            $form['fields'][ $field['name'] ] = array( 'type' => $field['type'] ?? 'text', 'options' => array_values( $options ), 'required' => ! empty( $field['required'] ), 'instructions' => wp_strip_all_tags( $instructions ), 'placeholder' => wp_strip_all_tags( $placeholder ) );
+        }
+        return $form;
+    }
+    private static function saved_form(): array {
+        $value = get_transient( self::key() . '_form' );
+        if ( ! is_array( $value ) || ! is_array( $value['fields'] ?? null ) || count( $value['fields'] ) > 60 ) return array();
+        $fields = array();
+        foreach ( $value['fields'] as $name => $field ) {
+            if ( ! is_string( $name ) || ! is_array( $field ) ) return array();
+            $fields[] = array_merge( $field, array( 'name' => $name ) );
+        }
+        try { return self::form_config( array( 'form' => $value, 'fields' => $fields ) ); }
+        catch ( \Throwable $error ) { return array(); }
+    }
+    private static function accounts( array $response ): array {
+        if ( ! is_array( $response['accounts'] ?? null ) || count( $response['accounts'] ) > 200 ) throw self::failure();
+        $out = array();
+        foreach ( $response['accounts'] as $row ) {
+            if ( ! is_array( $row ) || ! is_numeric( $row['id'] ?? null ) || (int) $row['id'] < 1 || ! is_string( $row['name'] ?? null ) ||
+                ! preg_match( '/\A[A-Za-z0-9_.-]{1,96}\z/', $row['name'] ) || ! is_string( $row['token'] ?? null ) || strlen( $row['token'] ) < 8 || strlen( $row['token'] ) > 512 ) throw self::failure();
+            $out[ (int) $row['id'] ] = $row;
+        }
+        return $out;
+    }
+    private static function account_names( array $accounts ): array {
+        $out = array();
+        foreach ( $accounts as $id => $account ) $out[ $id ] = $account['name'];
+        return $out;
+    }
+    /** Adapter maps a small allowlist; no arbitrary provider setting becomes a WordPress option. */
+    private static function apply_account( array $account, array $response, bool $commit = true ): array {
+        $settings = $response['settings'] ?? null;
+        if ( ! is_array( $settings ) || ! hash_equals( $account['token'], $settings['vwsToken'] ?? '' ) || $account['name'] !== ( $settings['vwsAccount'] ?? '' ) ) throw self::failure();
+        $fingerprints = $response['callback_fingerprints'] ?? array();
+        if ( ! is_array( $fingerprints ) ) throw self::failure();
+        $missing = array();
+        foreach ( call_user_func( self::$adapter['properties'] ) as $key => $expected ) {
+            $found = $fingerprints[ $key ] ?? null;
+            if ( null !== $found && ( ! is_string( $found ) || ! hash_equals( hash( 'sha256', $expected ), $found ) ) ) throw self::failure();
+            if ( isset( $settings[ $key ] ) && $settings[ $key ] !== '' && $settings[ $key ] !== $expected ) throw self::failure();
+            if ( null === $found && empty( $settings[ $key ] ) ) $missing[] = $key;
+        }
+        if ( isset( self::$adapter['validate'] ) ) call_user_func( self::$adapter['validate'], $settings );
+        if ( $commit ) call_user_func( self::$adapter['import'], $settings );
+        return $missing;
+    }
+    /** Public for owned native regression fixtures; native post() owns capability/nonce handling. */
+    public static function perform( string $operation, array $input ): void {
+        if ( ! current_user_can( 'manage_options' ) ) throw self::failure();
+        $state = self::state();
+        if ( 'disconnect' === $operation ) { delete_option( self::key() ); return; }
+        if ( in_array( $operation, array( 'load', 'login', 'register' ), true ) ) {
+            if ( '1' !== ( $input['consent'] ?? '' ) ) throw self::failure();
+            if ( 'load' === $operation ) {
+                $form = self::form_config( self::request( 'config' ) );
+                set_transient( self::key() . '_form', $form, 15 * MINUTE_IN_SECONDS );
+                return;
+            }
+            $email = self::text( $input, 'email' );
+            if ( ! is_email( $email ) ) throw self::failure();
+            $body = array( 'email' => $email );
+            if ( 'register' === $operation ) {
+                $form = self::saved_form();
+                if ( ! $form || '1' !== ( $input['terms'] ?? '' ) ) throw self::failure();
+                $body['name'] = self::text( $input, 'name', 100 );
+                if ( strlen( $body['name'] ) < 3 ) throw self::failure();
+                $fields = $input['fields'] ?? array();
+                if ( ! is_array( $fields ) || array_diff_key( $fields, $form['fields'] ) ) throw self::failure();
+                $body['fields'] = array();
+                if ( isset( $form['fields']['Website'] ) ) {
+                    $body['fields']['Website'] = home_url( '/' );
+                }
+                foreach ( $form['fields'] as $key => $field ) {
+                    if ( 'Website' === $key ) continue;
+                    $value = $fields[ $key ] ?? ( 'multiselect' === $field['type'] ? array() : '' );
+                    if ( 'multiselect' === $field['type'] ) {
+                        if ( ! is_array( $value ) || count( $value ) > 100 ) throw self::failure();
+                        foreach ( $value as $choice ) if ( ! is_string( $choice ) || ! in_array( $choice, $field['options'], true ) ) throw self::failure();
+                    } elseif ( ! is_string( $value ) || strlen( $value ) > 2000 || ( 'select' === $field['type'] && '' !== $value && ! in_array( $value, $field['options'], true ) ) ) throw self::failure();
+                    if ( $field['required'] && ( '' === $value || array() === $value ) ) throw self::failure();
+                    $body['fields'][ $key ] = is_array( $value ) ? array_map( 'sanitize_text_field', $value ) : sanitize_textarea_field( $value );
+                }
+                $current_form = self::form_config( self::request( 'config' ) );
+                if ( ! hash_equals( hash( 'sha256', wp_json_encode( $form ) ), hash( 'sha256', wp_json_encode( $current_form ) ) ) ) throw self::failure();
+            }
+            self::request( $operation, $body );
+            self::save( array( 'pending_email' => $email, 'consent' => time() ) );
+            return;
+        }
+        if ( 'confirm' === $operation ) {
+            $email = $state['pending_email'] ?? '';
+            $pin = self::text( $input, 'pin', 128 );
+            if ( empty( $state['consent'] ) || ! is_string( $email ) || ! is_email( $email ) || '' === $pin ) throw self::failure();
+            $data = self::request( 'confirm', array( 'email' => $email, 'pin' => $pin ) );
+            if ( true !== ( $data['confirmed'] ?? false ) ) throw self::failure();
+            $next = array( 'contact_id' => $data['contact_id'] ?? null, 'remote_token' => $data['remote_token'] ?? null, 'expires' => $data['remote_token_expires'] ?? null, 'consent' => time() );
+            if ( ! is_int( $next['expires'] ) || $next['expires'] < 0 ) throw self::failure();
+            $next['expires'] = min( $next['expires'] ?: time() + 30 * DAY_IN_SECONDS, time() + 30 * DAY_IN_SECONDS );
+            self::credentials( $next );
+            $next['accounts'] = self::account_names( self::accounts( $data ) );
+            self::save( $next );
+            delete_transient( self::key() . '_form' );
+            return;
+        }
+        $credentials = self::credentials( $state );
+        if ( 'create' === $operation && '1' !== ( $input['create_approved'] ?? '' ) ) throw self::failure();
+        if ( ! in_array( $operation, array( 'accounts', 'create', 'import', 'provision' ), true ) ) throw self::failure();
+        $response = self::request( 'create' === $operation ? 'account_new' : 'accounts', $credentials + ( 'create' === $operation ? array( 'website' => home_url( '/' ) ) : array() ) );
+        $accounts = self::accounts( $response );
+        $state['accounts'] = self::account_names( $accounts );
+        if ( in_array( $operation, array( 'import', 'provision' ), true ) ) {
+            $id = self::text( $input, 'account_id', 12 );
+            if ( ! ctype_digit( $id ) || ! isset( $accounts[ (int) $id ] ) ) throw self::failure();
+            $account = $accounts[ (int) $id ];
+            $result = self::request( 'settings', $credentials + array( 'token' => $account['token'] ) );
+            if ( 'provision' === $operation ) {
+                if ( ! isset( self::$adapter['validate'] ) ) throw self::failure();
+                $missing = self::apply_account( $account, $result, false );
+                if ( $missing ) {
+                    try { $capabilities = self::request( 'callback-capabilities' ); }
+                    catch ( \Throwable $error ) { throw new \RuntimeException( 'provider_update' ); }
+                    if ( 1 !== ( $capabilities['version'] ?? null ) || true !== ( $capabilities['atomic'] ?? false ) || true !== ( $capabilities['site_proof'] ?? false ) || ! is_array( $capabilities['products'] ?? null ) || ! in_array( self::$adapter['slug'], $capabilities['products'], true ) ) throw new \RuntimeException( 'provider_update' );
+                    $properties = call_user_func( self::$adapter['properties'] );
+                    $nonce = bin2hex( random_bytes(24) ); $proof_key = bin2hex( random_bytes(32) ); $expires = time() + 90;
+                    $pending = array( 'nonce' => $nonce, 'expires' => $expires, 'site' => home_url('/'), 'provider' => self::provider(), 'plugin' => self::$adapter['slug'], 'account_id' => (int) $id, 'properties_hash' => hash('sha256', wp_json_encode($properties)), 'key' => $proof_key, 'user_id' => get_current_user_id() );
+                    $proof_name = self::$adapter['option'] . '_proof_' . hash('sha256', $nonce);
+                    if ( ! set_transient( $proof_name, $pending, 90 ) ) throw self::failure();
+                    try {
+                        $expected = array(); foreach ( $properties as $name => $value ) $expected[$name] = $result['callback_fingerprints'][$name] ?? null;
+                        $configured = self::request( 'callback-provision', $credentials + array( 'token' => $account['token'], 'plugin' => self::$adapter['slug'], 'site' => home_url('/'), 'account_id' => (int) $id, 'properties' => $properties, 'expected' => $expected, 'nonce' => $nonce, 'expires' => $expires, 'proof_key' => $proof_key ) );
+                        if ( 1 !== ( $configured['version'] ?? null ) || (int) $id !== ( $configured['account_id'] ?? null ) || $nonce !== ( $configured['nonce'] ?? null ) || ! is_array( $configured['configured'] ?? null ) ) throw self::failure();
+                        foreach ( $properties as $name => $value ) if ( hash('sha256', $value) !== ( $configured['configured'][$name] ?? null ) ) throw self::failure();
+                        $result = self::request( 'settings', $credentials + array( 'token' => $account['token'] ) );
+                        if ( self::apply_account( $account, $result, false ) ) throw self::failure();
+                    } finally { delete_transient( $proof_name ); }
+                }
+            }
+            $state['callback_required'] = self::apply_account( $account, $result );
+            $state['selected_name'] = $account['name'];
+        }
+        self::save( $state );
+    }
+    public static function post(): void {
+        if ( ! current_user_can( 'manage_options' ) ) wp_die( esc_html__( 'You cannot manage this connection.', '{{DOMAIN}}' ), '', array( 'response' => 403 ) );
+        if ( ! isset( $_SERVER['REQUEST_METHOD'] ) || ! is_string( $_SERVER['REQUEST_METHOD'] ) || 'post' !== sanitize_key( wp_unslash( $_SERVER['REQUEST_METHOD'] ) ) ) wp_die( esc_html__( 'POST is required.', '{{DOMAIN}}' ), '', array( 'response' => 405 ) );
+        check_admin_referer( self::$adapter['action'] );
+        $message = 'success'; $operation = '';
+        try {
+            // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- perform() validates every field by operation before use.
+            $input = wp_unslash( $_POST );
+            $operation = self::text( $input, 'operation', 30 );
+            if ( 'import' === $operation && '1' === ( $input['configure_callback'] ?? '' ) ) $operation = 'provision';
+            self::perform( $operation, $input );
+        } catch ( \Throwable $error ) { $message = 'provider_update' === $error->getMessage() ? 'provider_update' : 'failed'; }
+        wp_safe_redirect( add_query_arg( array( 'connection_result' => $message, 'contact' => in_array( $operation, array( 'load', 'register' ), true ) ? 'new' : 'existing' ), admin_url( self::$adapter['page'] ) ) );
+        exit;
+    }
+    public static function register_proof(): void {
+        if ( ! isset( rest_get_server()->get_routes()['/videowhisper-streaming-connect/v1/proof'] ) ) register_rest_route( 'videowhisper-streaming-connect/v1', '/proof', array( 'methods' => 'POST', 'permission_callback' => '__return_true', 'callback' => array( __CLASS__, 'proof' ) ) );
+    }
+    public static function proof( \WP_REST_Request $request ) {
+        $data = $request->get_json_params();
+        $deny = new \WP_Error( 'vwconf_callback_proof', __( 'Callback website proof rejected.', '{{DOMAIN}}' ), array( 'status' => 403 ) );
+        if ( strlen($request->get_body()) > 8192 || ! is_array($data) || 1 !== ($data['version'] ?? null) || ! is_string($data['nonce'] ?? null) || ! preg_match('/\A[a-f0-9]{48}\z/', $data['nonce']) ) return $deny;
+        $pending = get_transient( self::$adapter['option'] . '_proof_' . hash('sha256', $data['nonce']) );
+        if ( ! is_array($pending) || ! user_can($pending['user_id'] ?? 0, 'manage_options') || ! is_int($data['expires'] ?? null) || $data['expires'] < time() || $data['expires'] > time() + 120 ) return $deny;
+        foreach (array('nonce','expires','site','provider','plugin','account_id','properties_hash') as $field) if (($data[$field] ?? null) !== ($pending[$field] ?? null)) return $deny;
+        if ($pending['site'] !== home_url('/') || $pending['provider'] !== self::provider() || $pending['plugin'] !== self::$adapter['slug']) return $deny;
+        $text = implode("\n", array('vws-streaming-callback-v1',$data['nonce'],$data['expires'],$data['site'],$data['provider'],$data['plugin'],$data['account_id'],$data['properties_hash']));
+        return new \WP_REST_Response(array('proof'=>hash_hmac('sha256',$text,$pending['key'])),200,array('Cache-Control'=>'private, no-store'));
+    }
+    private static function form( string $operation ): void {
+        echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '"><input type="hidden" name="action" value="' . esc_attr( self::$adapter['action'] ) . '"><input type="hidden" name="operation" value="' . esc_attr( $operation ) . '">';
+        wp_nonce_field( self::$adapter['action'] );
+    }
+    private static function consent(): void {
+        echo '<p><label><input type="checkbox" name="consent" value="1" required> ' . esc_html__( 'I agree to send this website and plugin identifier, my contact details and selected registration answers to VideoWhisper CRM for account setup and support.', '{{DOMAIN}}' ) . '</label></p>';
+    }
+    private static function contact_tabs( string $selected ): void {
+        echo '<nav class="nav-tab-wrapper" aria-label="' . esc_attr__( 'Contact options', '{{DOMAIN}}' ) . '">';
+        foreach ( array( 'existing' => __( 'Existing contact', '{{DOMAIN}}' ), 'new' => __( 'New contact', '{{DOMAIN}}' ) ) as $key => $label ) {
+            echo '<a class="nav-tab ' . ( $selected === $key ? 'nav-tab-active' : '' ) . '" ' . ( $selected === $key ? 'aria-current="page"' : '' ) . ' href="' . esc_url( add_query_arg( 'contact', $key, admin_url( self::$adapter['page'] ) ) ) . '">' . esc_html( $label ) . '</a>';
+        }
+        echo '</nav>';
+    }
+    private static function contact_fields( bool $name = false ): void {
+        $prefix = self::$adapter['slug'] . '-contact-';
+        echo '<table class="form-table" role="presentation"><tbody>';
+        if ( $name ) echo '<tr><th scope="row"><label for="' . esc_attr( $prefix . 'name' ) . '">' . esc_html__( 'Name', '{{DOMAIN}}' ) . '</label></th><td><input class="regular-text" id="' . esc_attr( $prefix . 'name' ) . '" name="name" minlength="3" maxlength="100" autocomplete="name" required></td></tr>';
+        echo '<tr><th scope="row"><label for="' . esc_attr( $prefix . 'email' ) . '">' . esc_html__( 'Email', '{{DOMAIN}}' ) . '</label></th><td><input class="regular-text" id="' . esc_attr( $prefix . 'email' ) . '" type="email" name="email" autocomplete="email" maxlength="200" required></td></tr></tbody></table>';
+    }
+    private static function links(): void {
+        echo '<footer class="vws-connect-footer"><a href="https://www.videowhisper.com/view.php?p=Terms+of+Use" target="_blank" rel="noopener noreferrer">' . esc_html__( 'Provider terms', '{{DOMAIN}}' ) . '</a><a href="https://www.videowhisper.com/view.php?p=Privacy+Policy" target="_blank" rel="noopener noreferrer">' . esc_html__( 'Provider privacy policy', '{{DOMAIN}}' ) . '</a><a href="' . esc_url( add_query_arg( array( 'Website' => home_url( '/' ), 'Plugin' => self::$adapter['slug'] ), self::provider() . '/' ) ) . '" target="_blank" rel="noopener noreferrer">' . esc_html__( 'Contact support', '{{DOMAIN}}' ) . '</a></footer>';
+    }
+    public static function render(): void {
+        if ( ! current_user_can( 'manage_options' ) ) return;
+        $state = self::state();
+        echo '<section class="vws-streaming-connect"><h2>' . esc_html__( 'Connect to VideoWhisper', '{{DOMAIN}}' ) . '</h2><p>' . esc_html__( 'Optional turnkey setup: request a free trial streaming account where offered, or connect an existing paid account and configure compatible settings automatically. Manual server settings remain available without connecting. Availability, quotas and trial terms are determined by the provider.', '{{DOMAIN}}' ) . '</p>';
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only allowlisted status message, no state change.
+        $result = isset( $_GET['connection_result'] ) && is_string( $_GET['connection_result'] ) ? sanitize_key( wp_unslash( $_GET['connection_result'] ) ) : '';
+        if ( 'provider_update' === $result ) echo '<div class="notice notice-warning inline"><p><strong>' . esc_html( self::$adapter['name'] ?? self::$adapter['slug'] ) . ': </strong>' . esc_html__( 'This provider needs the safe callback provisioning update. No callback or manual setting was changed. Use manual setup or ask the provider to enable the atomic callback API.', '{{DOMAIN}}' ) . '</p></div>';
+        if ( 'failed' === $result ) echo '<div class="notice notice-error inline"><p><strong>' . esc_html( self::$adapter['name'] ?? self::$adapter['slug'] ) . ': </strong>' . esc_html__( 'The request failed. Check the email code, selected account and provider availability. An account with a different callback cannot be imported; ask support for a dedicated streaming account. Existing meeting settings were retained.', '{{DOMAIN}}' ) . '</p></div>';
+        if ( isset( $state['pending_email'] ) ) {
+            echo '<div class="vws-connect-card"><h3>' . esc_html__( 'Confirm your email', '{{DOMAIN}}' ) . '</h3>';
+            self::form( 'confirm' );
+            echo '<p>' . esc_html__( 'Check your email for the latest code. Confirmation may finish creating the account requested during registration.', '{{DOMAIN}}' ) . '</p><table class="form-table" role="presentation"><tbody><tr><th scope="row"><label for="vws-connect-pin">' . esc_html__( 'Email confirmation or login code', '{{DOMAIN}}' ) . '</label></th><td><input id="vws-connect-pin" name="pin" autocomplete="one-time-code" maxlength="128" required></td></tr></tbody></table><button class="button button-primary">' . esc_html__( 'Confirm email and finish account setup', '{{DOMAIN}}' ) . '</button></form></div>';
+        } elseif ( isset( $state['remote_token'] ) ) {
+            if ( ! is_int( $state['expires'] ?? null ) || $state['expires'] <= time() ) echo '<div class="notice notice-warning inline"><p><strong>' . esc_html( self::$adapter['name'] ?? self::$adapter['slug'] ) . ': </strong>' . esc_html__( 'This CRM login session expired. Disconnect it below, then request a new email code. Imported manual settings continue to work.', '{{DOMAIN}}' ) . '</p></div>';
+            echo '<div class="vws-connect-card"><h3>' . esc_html__( 'Your streaming accounts', '{{DOMAIN}}' ) . '</h3><table class="widefat striped vws-connect-accounts"><thead><tr><th scope="col">' . esc_html__( 'Streaming account', '{{DOMAIN}}' ) . '</th><th scope="col">' . esc_html__( 'Setup', '{{DOMAIN}}' ) . '</th></tr></thead><tbody>';
+            foreach ( is_array( $state['accounts'] ?? null ) ? $state['accounts'] : array() as $id => $name ) {
+                if ( ! is_string( $name ) ) continue;
+                echo '<tr><td><strong>' . esc_html( $name ) . '</strong></td><td>'; self::form( 'import' );
+                echo '<input type="hidden" name="account_id" value="' . absint( $id ) . '"><p class="vws-connect-actions"><button class="button">' . esc_html__( 'Use this account', '{{DOMAIN}}' ) . '</button><button class="button button-primary" name="configure_callback" value="1">' . esc_html__( 'Use account and configure callback', '{{DOMAIN}}' ) . '</button></p></form></td></tr>';
+            }
+            echo '</tbody></table>'; self::form( 'accounts' ); echo '<p><button class="button">' . esc_html__( 'Refresh account list', '{{DOMAIN}}' ) . '</button></p></form>';
+            self::form( 'create' );
+            echo '<p><label><input type="checkbox" name="create_approved" value="1" required> ' . esc_html__( 'Create a testing account for this website under the provider’s current free-account terms and quota. This may send an account email. Existing domain accounts are not replaced.', '{{DOMAIN}}' ) . '</label></p><button class="button">' . esc_html__( 'Create testing account', '{{DOMAIN}}' ) . '</button></form>';
+            if ( ! empty( $state['selected_name'] ) ) {
+                echo '<h3>' . esc_html__( 'Account settings imported', '{{DOMAIN}}' ) . '</h3><p>' . esc_html__( 'Use a dedicated streaming account with support for this plugin. Confirm the callback below in the provider account before testing.', '{{DOMAIN}}' ) . '</p>';
+                foreach ( call_user_func( self::$adapter['properties'] ) as $key => $url ) echo '<p><strong>' . esc_html( $key ) . '</strong>: <code>' . esc_html( $url ) . '</code></p>';
+                if ( ! empty( $state['callback_required'] ) ) echo '<div class="notice notice-warning inline"><p><strong>' . esc_html( self::$adapter['name'] ?? self::$adapter['slug'] ) . ': </strong>' . esc_html__( 'Callback setup is still required on the provider account. Safe provisioning can configure an empty callback after website verification, but never replaces another callback. Use the setup button or set the displayed callback manually on a dedicated account.', '{{DOMAIN}}' ) . '</p></div>';
+            }
+            echo '</div>';
+        } else {
+            // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only contact subtab; switching tabs never contacts the provider.
+            $selected = isset( $_GET['contact'] ) && is_string( $_GET['contact'] ) && 'new' === sanitize_key( wp_unslash( $_GET['contact'] ) ) ? 'new' : 'existing';
+            self::contact_tabs( $selected ); echo '<div class="vws-connect-card">';
+            if ( 'existing' === $selected ) {
+                echo '<h3>' . esc_html__( 'Existing VideoWhisper contact', '{{DOMAIN}}' ) . '</h3>'; self::form( 'login' ); self::contact_fields(); self::consent();
+                echo '<button class="button button-primary">' . esc_html__( 'Email a login code', '{{DOMAIN}}' ) . '</button></form>';
+            } else {
+                echo '<h3>' . esc_html__( 'New contact', '{{DOMAIN}}' ) . '</h3>'; $form = self::saved_form();
+                if ( ! $form ) {
+                    self::form( 'load' ); self::consent(); echo '<button class="button button-primary">' . esc_html__( 'Load registration form', '{{DOMAIN}}' ) . '</button></form>';
+                } else {
+                    echo '<h4>' . esc_html( $form['name'] ) . '</h4><p>' . esc_html( $form['instructions'] ) . '</p>'; self::form( 'register' ); self::contact_fields( true );
+                    echo '<table class="form-table" role="presentation"><tbody>';
+                    foreach ( $form['fields'] as $name => $field ) {
+                        $id = self::$adapter['slug'] . '-field-' . substr( hash( 'sha256', $name ), 0, 12 );
+                        if ( 'Website' === $name ) { echo '<tr><th scope="row">' . esc_html__( 'Website', '{{DOMAIN}}' ) . '</th><td><code>' . esc_html( home_url( '/' ) ) . '</code></td></tr>'; continue; }
+                        echo '<tr><th scope="row"><label for="' . esc_attr( $id ) . '">' . esc_html( $name ) . '</label></th><td>';
+                        if ( in_array( $field['type'], array( 'select', 'multiselect' ), true ) ) {
+                            echo '<select id="' . esc_attr( $id ) . '" name="fields[' . esc_attr( $name ) . ']' . ( 'multiselect' === $field['type'] ? '[]' : '' ) . '" ' . ( 'multiselect' === $field['type'] ? 'multiple' : '' ) . ( $field['instructions'] ? ' aria-describedby="' . esc_attr( $id . '-help' ) . '"' : '' ) . '>';
+                            foreach ( $field['options'] as $option ) echo '<option value="' . esc_attr( $option ) . '">' . esc_html( $option ) . '</option>';
+                            echo '</select>';
+                        } elseif ( 'textarea' === $field['type'] ) echo '<textarea id="' . esc_attr( $id ) . '" name="fields[' . esc_attr( $name ) . ']" maxlength="2000"' . ( $field['instructions'] ? ' aria-describedby="' . esc_attr( $id . '-help' ) . '"' : '' ) . '></textarea>';
+                        else echo '<input id="' . esc_attr( $id ) . '" name="fields[' . esc_attr( $name ) . ']" type="' . ( 'toggle' === $field['type'] ? 'checkbox' : 'text' ) . '" ' . ( 'toggle' === $field['type'] ? 'value="1"' : '' ) . ' maxlength="2000"' . ( $field['instructions'] ? ' aria-describedby="' . esc_attr( $id . '-help' ) . '"' : '' ) . '>';
+                        if ( $field['instructions'] ) echo '<p class="description" id="' . esc_attr( $id . '-help' ) . '">' . esc_html( $field['instructions'] ) . '</p>';
+                        echo '</td></tr>';
+                    }
+                    echo '</tbody></table>'; self::consent();
+                    echo '<p>' . esc_html( $form['terms'] ?? '' ) . '</p><p><label><input type="checkbox" name="terms" value="1" required> ' . esc_html__( 'I accept the displayed registration terms and request a free testing account for this website where offered.', '{{DOMAIN}}' ) . '</label></p><button class="button button-primary">' . esc_html__( 'Register with VideoWhisper', '{{DOMAIN}}' ) . '</button>';
+                    if ( ! empty( $form['termsUrl'] ) ) echo '<p><a href="' . esc_url( $form['termsUrl'] ) . '" target="_blank" rel="noopener noreferrer">' . esc_html__( 'Registration terms', '{{DOMAIN}}' ) . '</a></p>';
+                    echo '</form>';
+                }
+            }
+            echo '</div>';
+        }
+        if ( $state ) {
+            self::form( 'disconnect' );
+            echo '<p><button class="button">' . esc_html__( 'Disconnect CRM session', '{{DOMAIN}}' ) . '</button></p><p>' . esc_html__( 'Disconnecting removes this administrator’s local CRM session only. Imported manual settings, meetings and provider accounts are retained; remote session retention and revocation follow provider policy.', '{{DOMAIN}}' ) . '</p></form>';
+        }
+        self::links(); echo '</section>';
+    }
+}

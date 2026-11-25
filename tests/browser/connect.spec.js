@@ -1,0 +1,30 @@
+import { test, expect } from '@playwright/test';
+test('native Connect tab preserves manual setup, consent, POST/nonce guards and local errors',async({page,browser})=>{
+ test.skip(!process.env.VWC_WP_TEST_URL,'Optional disposable WordPress fixture');
+ const wp=process.env.VWC_WP_TEST_URL;
+ await page.goto(wp+'/wp-login.php');await page.locator('#user_login').fill('admin');await page.locator('#user_pass').fill('password');await page.locator('#wp-submit').click();
+ const requests=[];page.on('request',request=>requests.push({url:request.url(),type:request.resourceType()}));
+ // Other plugins' toolbar emoji are rendered by core on the combined fixture.
+ const localOrCoreEmoji=request=>{const url=new URL(request.url);return url.origin===new URL(wp).origin||(request.type==='image'&&url.origin==='https://s.w.org'&&/^\/images\/core\/emoji\/[0-9.]+\/svg\/[a-f0-9-]+\.svg$/.test(url.pathname));};
+ const url=wp+'/wp-admin/edit.php?post_type=vwconf_meeting&page=vwconf-settings&tab=connect';await page.goto(url);
+ await expect(page.getByRole('heading',{name:'Connect to VideoWhisper',exact:true})).toBeVisible();
+ await expect(page.getByRole('link',{name:'Manual server settings',exact:true})).toBeVisible();
+ expect(requests.every(localOrCoreEmoji)).toBe(true);
+ await expect(page.getByRole('link',{name:'Existing contact',exact:true})).toHaveAttribute('aria-current','page');await expect(page.getByRole('button',{name:'Load registration form',exact:true})).toHaveCount(0);
+ await page.getByRole('link',{name:'New contact',exact:true}).click();await expect(page.getByRole('button',{name:'Load registration form',exact:true})).toBeVisible();await expect(page.getByRole('button',{name:'Email a login code',exact:true})).toHaveCount(0);expect(requests.every(localOrCoreEmoji)).toBe(true);
+ await page.getByRole('link',{name:'Existing contact',exact:true}).click();
+ const endpoint=wp+'/wp-admin/admin-post.php';
+ const denied=await page.request.post(endpoint,{form:{action:'vwconf_crm_connection',operation:'load',consent:'1',_wpnonce:'invalid'}});expect(denied.status()).toBe(403);
+ const get=await page.request.get(endpoint+'?action=vwconf_crm_connection');expect(get.status()).toBe(405);
+ const form=page.locator('form').filter({has:page.getByRole('button',{name:'Email a login code',exact:true})});
+ await form.getByRole('textbox',{name:'Email',exact:true}).fill('fixture@example.test');
+ await form.getByRole('button',{name:'Email a login code',exact:true}).click();
+ expect(page.url()).toContain('tab=connect');await expect(form.getByRole('checkbox')).not.toBeChecked();
+ await form.getByRole('checkbox').check();await form.getByRole('button',{name:'Email a login code',exact:true}).click();
+ await expect(page.getByText(/The request failed\. Check the email code/)).toBeVisible();
+ expect(requests.some(request=>request.url.includes('/includes/class-streaming-connect.css'))).toBe(true);const footer=await page.locator('.vws-connect-footer').boundingBox(),lastForm=await page.locator('.vws-streaming-connect form').last().boundingBox();expect(footer.y).toBeGreaterThan(lastForm.y+lastForm.height);
+ await page.screenshot({path:process.env.VWC_CONNECT_CAPTURE||'test-results/connect-desktop.png',fullPage:true});
+ await page.setViewportSize({width:390,height:844});expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);await page.screenshot({path:process.env.VWC_CONNECT_MOBILE_CAPTURE||'test-results/connect-mobile.png',fullPage:true});
+ const guest=await browser.newContext();const p=await guest.newPage();await p.goto(wp+'/wp-login.php');await p.locator('#user_login').fill('vwconf_subscriber');await p.locator('#user_pass').fill('local-synthetic-password');await p.locator('#wp-submit').click();
+ const forbidden=await p.request.get(url);expect(forbidden.status()).toBe(403);await guest.close();
+});

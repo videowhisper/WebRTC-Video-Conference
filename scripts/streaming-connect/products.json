@@ -1,0 +1,8 @@
+{
+  "videowhisper-video-conference": {
+    "source": "videowhisper-video-conference/trunk",
+    "entry": "videowhisper-video-conference.php",
+    "bundle": "includes/class-streaming-connect.php",
+    "namespace": "VWCONF"
+  }
+}

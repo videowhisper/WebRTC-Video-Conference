@@ -14,7 +14,7 @@ for match in re.finditer(r'"[A-Za-z]+":\s*("(?:[^"\\]|\\.)*")', (root / 'src/con
     labels.add(ast.literal_eval(match.group(1)))
 def quote(value):
     return "'" + value.replace('\\', '\\\\').replace("'", "\\'") + "'"
-content = "<?php\nif (!defined('ABSPATH')) exit;\n/** Generated from complete client messages; evaluated only while rendering the app. */\nfunction vwc_labels(): array {\n    return [\n"
+content = "<?php\nif (!defined('ABSPATH')) exit;\n/** Generated from complete client messages; evaluated only while rendering the app. */\nfunction vwconf_labels(): array {\n    return [\n"
 content += ''.join('        ' + quote(value) + ' => __(' + quote(value) + ", 'videowhisper-video-conference'),\n" for value in sorted(labels))
 content += '    ];\n}\n'
 (target / 'includes').mkdir(parents=True, exist_ok=True)

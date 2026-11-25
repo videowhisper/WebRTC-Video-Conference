@@ -1,6 +1,6 @@
 <?php
 /** Room-scoped browser credentials; the account token never enters browser config. */
-final class VWC_Tickets {
+final class VWCONF_Tickets {
     public static function issue(string $key, string $account, string $user, string $room, string $role, int $limit = 4, int $expires = 0, string $policy = ''): string {
         $payload = ['account' => $account, 'user' => $user, 'version' => 1, 'room' => $room, 'role' => $role,
             'maxParticipants' => max(2, min(4, $limit)), 'expires' => $expires ?: time() + 3600, 'nonce' => bin2hex(random_bytes(12))];

@@ -1,9 +1,10 @@
 const storageKey = 'vwc-theme';
 let initialized = false;
 let memoryPreference = null;
+let defaultPreference = 'system';
 export function themePreference() {
   if (memoryPreference) return memoryPreference;
-  try { const saved = localStorage.getItem(storageKey); return ['light', 'dark'].includes(saved) ? saved : 'system'; } catch { return 'system'; }
+  try { const saved = localStorage.getItem(storageKey); return ['system', 'light', 'dark'].includes(saved) ? saved : defaultPreference; } catch { return defaultPreference; }
 }
 export function applyTheme() {
   const mode = themePreference();
@@ -20,4 +21,9 @@ export function initializeTheme() {
   applyTheme(); if (initialized) return; initialized = true;
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyTheme);
   window.addEventListener('storage', () => { memoryPreference = null; applyTheme(); window.dispatchEvent(new Event('vwc-theme')); });
+}
+
+export function setDefaultTheme(mode) {
+  defaultPreference = ['system', 'light', 'dark'].includes(mode) ? mode : 'system';
+  applyTheme(); window.dispatchEvent(new Event('vwc-theme'));
 }

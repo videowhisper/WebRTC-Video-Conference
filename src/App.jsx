@@ -4,7 +4,7 @@ import { Loader } from 'lucide-react';
 import { loadConferenceConfig } from './config/configLoader';
 import useConferenceWebRTC from './hooks/useConferenceWebRTC';
 import useConferenceStore from './store/useConferenceStore';
-import { initializeTheme } from './services/theme';
+import { initializeTheme, setDefaultTheme } from './services/theme';
 import Lobby from './components/Lobby';
 import Meeting from './components/Meeting';
 import StatusView from './components/StatusView';
@@ -22,7 +22,7 @@ export default function App() {
     if (initialized.current) return;
     initialized.current = true;
     initializeTheme();
-    loadConferenceConfig().then(setConfig).catch(setError);
+    loadConferenceConfig().then(config => { setDefaultTheme(config.conference?.defaultTheme); setConfig(config); }).catch(setError);
   }, [setConfig, setError]);
   useEffect(() => {
     if (!config?.presenceUrl || currentView !== 'Meeting') return;

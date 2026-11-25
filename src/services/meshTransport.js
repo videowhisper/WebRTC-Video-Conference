@@ -60,6 +60,7 @@ export class MeshTransport {
     }
   }
   publish(kind, stream) {
+    if (!stream.getTracks().length) return;
     const channel = createStreamId(this.config.channel, this.config.username, kind);
     this.local.set(channel, stream);
     if (!this.socket.connected || this.published.has(channel)) return;
@@ -67,8 +68,40 @@ export class MeshTransport {
     const p = this.config.stream || {};
     this.socket.emit('roomPublish', { room: this.config.channel, stream: channel, parameters: {
       type: 'webrtc', kind, width: p.width || 640, height: p.height || 360,
-      frameRate: p.framerate || 15, videoBitrate: p.videoBitrate || 180, audioBitrate: p.audioBitrate || 32,
+      frameRate: p.frameRate ?? p.framerate ?? 15, videoBitrate: p.videoBitrate || 180, audioBitrate: p.audioBitrate || 32,
     } });
+  }
+  async replaceStream(kind, stream) {
+    const epoch = this.epoch;
+    const channel = createStreamId(this.config.channel, this.config.username, kind), old = this.local.get(channel);
+    const sameKinds = old && ['audio', 'video'].every(type => old.getTracks().some(track => track.kind === type) === stream.getTracks().some(track => track.kind === type));
+    const peers = [...this.outgoing.entries()].filter(([key]) => JSON.parse(key)[0] === channel).map(([, pc]) => pc);
+    if (sameKinds && this.published.has(channel)) {
+      const changed = [];
+      try {
+        for (const pc of peers) for (const sender of pc.getSenders()) {
+          const replacement = stream.getTracks().find(track => track.kind === sender.track?.kind);
+          if (!replacement) continue;
+          const original = sender.track;
+          await sender.replaceTrack(replacement);
+          if (epoch !== this.epoch) throw Object.assign(new Error('media_operation_cancelled'), { name: 'AbortError' });
+          changed.push({ sender, original });
+        }
+      } catch (error) {
+        if (epoch === this.epoch) await Promise.allSettled(changed.map(({ sender, original }) => sender.replaceTrack(original)));
+        throw error;
+      }
+      if (epoch !== this.epoch) throw Object.assign(new Error('media_operation_cancelled'), { name: 'AbortError' });
+      this.local.set(channel, stream);
+      // Offers created while replaceTrack awaited may still carry the previous tracks.
+      for (const [key, pc] of this.outgoing) if (JSON.parse(key)[0] === channel && !peers.includes(pc)) {
+        this.close(pc); this.outgoing.delete(key);
+        void this.offer(JSON.parse(key)[1], channel).catch(() => {});
+      }
+    } else {
+      if (old || this.published.has(channel)) this.unpublish(kind);
+      if (stream.getTracks().length) this.publish(kind, stream);
+    }
   }
   remove(channel) {
     for (const peers of [this.outgoing, this.incoming]) for (const [key, pc] of peers) {
@@ -89,6 +122,6 @@ export class MeshTransport {
   reset() {
     this.epoch++;
     for (const peers of [this.outgoing, this.incoming]) { for (const pc of peers.values()) this.close(pc); peers.clear(); }
-    this.pendingCandidates.clear(); this.published.clear();
+    this.pendingCandidates.clear(); this.published.clear(); this.local.clear();
   }
 }

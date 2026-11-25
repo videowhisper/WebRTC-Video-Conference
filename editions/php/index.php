@@ -21,7 +21,7 @@ if (($_GET['action'] ?? '') === 'auth') {
     header('Content-Type: application/json');
     if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !$ready) { http_response_code(403); echo '{"login":false}'; exit; }
     $input = json_decode(file_get_contents('php://input', false, null, 0, 16384), true);
-    $result = is_array($input) ? VWC_Tickets::verify($key, $token, $input) : ['login' => false];
+    $result = is_array($input) ? VWCONF_Tickets::verify($key, $token, $input) : ['login' => false];
     if ($result['login']) {
         $ledger = is_file($storage . '/rooms.json') ? fopen($storage . '/rooms.json', 'r') : false;
         if (!$ledger || !flock($ledger, LOCK_SH)) $result = ['login' => false];
@@ -119,8 +119,8 @@ if ($ready) {
                 } else {
                     $_SESSION['authorized'][$room] = $entry['expires'];
                     $state['rooms'][$room]['lastActive'] = $now;
-                    $pin = VWC_Tickets::issue($key, $account, $_SESSION['user'], $room, $isHost ? 'host' : 'guest', 4, $entry['expires']);
-                    $config = VWC_Tickets::config($socket, $account, $_SESSION['user'], $pin, $room, $entry['title'] ?? 'Video conference');
+                    $pin = VWCONF_Tickets::issue($key, $account, $_SESSION['user'], $room, $isHost ? 'host' : 'guest', 4, $entry['expires']);
+                    $config = VWCONF_Tickets::config($socket, $account, $_SESSION['user'], $pin, $room, $entry['title'] ?? 'Video conference');
                     $config['displayName'] = 'Guest ' . strtoupper(substr($_SESSION['user'], -4));
                     $config['roomAccess'] = $entry['access'] ?? 'private';
                     $config['inviteUrl'] = $base . '?' . http_build_query(array_filter(['room' => $room, 'key' => $accessKey], static fn($v) => $v !== ''));

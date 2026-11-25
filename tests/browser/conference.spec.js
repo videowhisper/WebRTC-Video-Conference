@@ -44,7 +44,7 @@ test('denied camera permission remains recoverable without media',async({page})=
  await page.goto('/');const create=page.locator('form').filter({has:page.getByRole('button',{name:'Create meeting',exact:true})});await create.getByRole('checkbox').check();await create.getByRole('button').click();
  await page.evaluate(()=>{navigator.mediaDevices.getUserMedia=async()=>{throw new DOMException('Denied','NotAllowedError');};});
  await page.getByRole('checkbox',{name:'I agree to connect to the configured signaling service and share media with participants when enabled.'}).check();
- await page.getByRole('button',{name:'Join meeting',exact:true}).click();await expect(page.getByText('Camera or microphone unavailable. Allow browser access or join without media.')).toBeVisible();
+ await page.getByRole('button',{name:'Join meeting',exact:true}).click();await expect(page.getByText('Camera or microphone permission was denied. Update browser permissions, choose other devices, or join without media.')).toBeVisible();
  await page.getByLabel('Use camera and microphone').uncheck();await page.getByRole('button',{name:'Join meeting',exact:true}).click();await expect(page.getByRole('button',{name:'Leave',exact:true})).toBeVisible();
 });
 

@@ -90,3 +90,23 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .vwc-invite-inline { margin-bottom:1.25rem; border:1px solid var(--vwc-border); border-radius:.5rem; min-width:0; }
 .vwc-invite-inline .vwc-panel-content { padding:.75rem; font-size:.8rem; gap:.65rem; }
 .vwc-invite-inline header { min-height:2.5rem; padding:.5rem .75rem; font-size:.875rem; }
+
+.vwc-device-inline { border:1px solid var(--vwc-border); border-radius:.5rem; padding:.7rem; }
+.vwc-device-inline summary { cursor:pointer; font-size:.875rem; font-weight:600; }
+.vwc-device-content { padding:.75rem; overflow-y:auto; min-height:0; display:flex; flex-direction:column; gap:.75rem; font-size:.875rem; }
+.vwc-device-field { display:flex; flex-direction:column; gap:.4rem; min-width:0; }
+.vwc-device-field select { min-width:0; max-width:100%; padding:.55rem; border:1px solid var(--vwc-border); border-radius:.4rem; background:var(--vwc-bg); color:var(--vwc-text); }
+.vwc-device-actions { display:flex; gap:.5rem; flex-wrap:wrap; }
+.vwc-device-content button { border:1px solid var(--vwc-border); border-radius:.4rem; padding:.6rem; }
+.vwc-device-panel { display:flex; flex-direction:column; }
+.vwc-device-panel header { display:flex; align-items:center; justify-content:space-between; padding:.8rem; border-bottom:1px solid var(--vwc-border); }
+.vwc-device-panel header button { padding:.25rem .6rem; }
+.vwc-diagnostic-list { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:.4rem .8rem; }
+.vwc-diagnostic-list dt { overflow-wrap:anywhere; }
+.vwc-diagnostic-list dd { text-align:end; }
+
+/* Momentary audio control: permit pointer capture without long-press scrolling. */
+.vwc-ptt-button { display:inline-flex; align-items:center; justify-content:center; gap:.5rem; min-height:44px; padding:.5rem .8rem; border:1px solid var(--vwc-border); border-radius:999px; background:var(--vwc-surface); color:var(--vwc-text); touch-action:none; user-select:none; -webkit-touch-callout:none; }
+.vwc-ptt-button.vwc-ptt-active { background:#67e8f9; color:#083344; border-color:#22d3ee; }
+.vwc-ptt-button:disabled { opacity:.5; cursor:not-allowed; }
+.vwc-ptt-button:focus-visible { outline:3px solid #22d3ee; outline-offset:3px; }

@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Loader, LogIn } from 'lucide-react';
 import InvitePanel from './InvitePanel';
 import ThemeToggle from './ThemeToggle';
+import DevicePanel from './DevicePanel';
 import useConferenceStore from '../store/useConferenceStore';
 export default function Lobby({
   conference
@@ -15,7 +16,7 @@ export default function Lobby({
   const [displayName, setDisplayName] = useState(config?.displayName || config?.username || '');
   const [starting, setStarting] = useState(false);
   const [consent, setConsent] = useState(false);
-  const [withMedia, setWithMedia] = useState(true);
+  const [withMedia, setWithMedia] = useState(config?.conference?.joinWithMedia !== false);
   const start = async () => {
     setStarting(true);
     try {
@@ -34,7 +35,7 @@ export default function Lobby({
             <ThemeToggle />
           </header>
 
-          <form className="vwc-lobby-form" onSubmit={event => { event.preventDefault(); if (consent && !starting && !socketConnecting) start(); }}>
+          <form className="vwc-lobby-form" onSubmit={event => { event.preventDefault(); if (consent && !starting && !socketConnecting && !conference.deviceBusy) start(); }}>
           <label className="text-sm font-medium vwc-secondary" htmlFor="displayName">{t("Display name")}</label>
           <input id="displayName" name="displayName" autoComplete="nickname" maxLength={80} value={displayName} onChange={event => setDisplayName(event.target.value)} className="vwc-name-input vwc-muted-surface vwc-text" />
 
@@ -43,9 +44,11 @@ export default function Lobby({
             </div>}
 
           <label className="vwc-lobby-option text-sm"><input type="checkbox" checked={withMedia} onChange={e => setWithMedia(e.target.checked)} />{t("Use camera and microphone")}</label>
+          <label className="vwc-lobby-option text-sm"><input type="checkbox" checked={conference.pushToTalkEnabled} onChange={e => conference.setPushToTalkEnabled(e.target.checked)} />{t("Push to talk: hold to speak")}</label>
+          <DevicePanel conference={conference} inline disabled={starting || socketConnecting} />
           <label className="vwc-lobby-option text-sm"><input type="checkbox" checked={consent} onChange={e => setConsent(e.target.checked)} />{t("I agree to connect to the configured signaling service and share media with participants when enabled.")}</label>
           {notice && <p role="status" className="vwc-lobby-notice text-sm">{notice}</p>}
-          <button type="submit" disabled={starting || socketConnecting || !consent} className="vwc-lobby-join inline-flex items-center justify-center gap-2 rounded-md bg-cyan-300 px-4 py-3 font-semibold text-zinc-950 transition hover:bg-cyan-200 disabled:cursor-not-allowed disabled:opacity-50">
+          <button type="submit" disabled={starting || socketConnecting || conference.deviceBusy || !consent} className="vwc-lobby-join inline-flex items-center justify-center gap-2 rounded-md bg-cyan-300 px-4 py-3 font-semibold text-zinc-950 transition hover:bg-cyan-200 disabled:cursor-not-allowed disabled:opacity-50">
             {starting ? <Loader className="h-5 w-5 animate-spin" /> : <LogIn className="h-5 w-5" />}{t("Join meeting")}</button>
 
           </form>

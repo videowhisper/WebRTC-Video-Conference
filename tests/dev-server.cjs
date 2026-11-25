@@ -13,7 +13,8 @@ const php=spawn('php',['-S','127.0.0.1:8091','-t',path.join(__dirname,'../editio
 const server=http.createServer((req,res)=>{if(req.method==='POST' && req.url==='/reset')require('node:fs').rmSync(path.join(storage,'rooms.json'),{force:true});if(req.method==='POST' && req.url==='/drop'){for(const s of nsp.sockets.values())s.conn.close();}res.writeHead(200);res.end('local conference fixture');});
 const io=new Server(server,{cors:{origin:['http://127.0.0.1:8091','http://localhost:8091']},maxHttpBufferSize:120000});
 const nsp=io.of('/conference');
-const conference=createConference({getPlan:()=>({connections:40,totalBitrate:50000})});
+const peerConfig=process.env.VWC_TEST_TURN_URL?{iceTransportPolicy:'relay',iceServers:[{urls:process.env.VWC_TEST_TURN_URL,username:'conference-fixture',credential:'local-relay-fixture-only'}]}:{iceServers:[]};
+const conference=createConference({peerConfig,getPlan:()=>({connections:40,totalBitrate:50000})});
 nsp.use(async(socket,next)=>{
  try {
   const auth=socket.handshake.auth;

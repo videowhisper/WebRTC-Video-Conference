@@ -13,13 +13,13 @@ describe('mesh lifecycle',()=>{
   mesh.publish('camera',camera);mesh.publish('screen',screen);await mesh.offer('guest','room:me:screen');expect(peers[0].addTrack).toHaveBeenCalledWith('screen',screen);
  });
  it('queues ICE before remote descriptions and drains after answer',async()=>{
-  const {mesh,peers}=fixture();mesh.publish('camera',{getTracks:()=>[]});await mesh.offer('guest','room:me:camera');
+  const {mesh,peers}=fixture();mesh.publish('camera',{getTracks:()=>[{kind:'video'}]});await mesh.offer('guest','room:me:camera');
   await mesh.signal({type:'candidate',channel:'room:me:camera',from:'guest',candidate:{candidate:'candidate'}});
   expect(peers[0].addIceCandidate).not.toHaveBeenCalled();
   await mesh.signal({type:'answer',channel:'room:me:camera',from:'guest',content:{type:'answer',sdp:'answer'}});expect(peers[0].addIceCandidate).toHaveBeenCalledTimes(1);
  });
  it('closes every peer and clears pending state on reconnect and leave',async()=>{
-  const {mesh,peers}=fixture();mesh.publish('camera',{getTracks:()=>[]});await mesh.offer('guest','room:me:camera');mesh.reset();expect(peers[0].close).toHaveBeenCalled();expect(mesh.outgoing.size).toBe(0);expect(mesh.pendingCandidates.size).toBe(0);expect(mesh.published.size).toBe(0);
+  const {mesh,peers}=fixture();mesh.publish('camera',{getTracks:()=>[{kind:'video'}]});await mesh.offer('guest','room:me:camera');mesh.reset();expect(peers[0].close).toHaveBeenCalled();expect(mesh.outgoing.size).toBe(0);expect(mesh.pendingCandidates.size).toBe(0);expect(mesh.published.size).toBe(0);
  });
  it('stops tracks, detaches screen-ended callbacks, and uses stable channel IDs',()=>{
   const track={stop:vi.fn(),onended:()=>{}};stopStream({getTracks:()=>[track]});expect(track.stop).toHaveBeenCalled();expect(track.onended).toBeNull();expect(createStreamId('room','me','screen')).toBe('room:me:screen');
