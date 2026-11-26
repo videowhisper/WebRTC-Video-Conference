@@ -10,6 +10,11 @@
 .vws-streaming-connect .vws-connect-actions .button { white-space:normal; height:auto; }
 .vws-streaming-connect .vws-connect-accounts { margin-bottom:20px; }
 .vws-streaming-connect .vws-connect-accounts th, .vws-streaming-connect .vws-connect-accounts td { vertical-align:middle; overflow-wrap:anywhere; }
+.vws-streaming-connect .vws-connect-accounts tr.vws-connect-site-account { background:#eef6fc; }
+.vws-streaming-connect .vws-connect-site-label { display:inline-block; margin:.15em .35em; padding:0 .55em; border:1px solid #8eb3d5; border-radius:4px; color:#17446c; }
+.vws-streaming-connect .vws-connect-detail { display:grid; grid-template-columns:minmax(10em,auto) minmax(0,1fr); gap:8px 16px; }
+.vws-streaming-connect .vws-connect-detail dt { font-weight:600; }
+.vws-streaming-connect .vws-connect-detail dd { margin:0; overflow-wrap:anywhere; }
 .vws-streaming-connect .vws-connect-footer { margin-top:24px; padding-top:16px; border-top:1px solid #c3c4c7; display:flex; flex-wrap:wrap; gap:8px 20px; }
 .vws-streaming-connect code { overflow-wrap:anywhere; }
 @media(max-width:782px) {
@@ -19,4 +24,7 @@
  .vws-streaming-connect .vws-connect-accounts, .vws-streaming-connect .vws-connect-accounts tbody, .vws-streaming-connect .vws-connect-accounts tr, .vws-streaming-connect .vws-connect-accounts td { display:block; width:auto; }
  .vws-streaming-connect .vws-connect-accounts thead { display:none; }
  .vws-streaming-connect .vws-connect-accounts td { padding:10px; }
+ .vws-streaming-connect .vws-connect-detail { grid-template-columns:1fr; }
+ .vws-streaming-connect .vws-connect-detail dd { margin-bottom:6px; }
 }
+.vws-streaming-connect .vws-connect-choices label { display:block; margin-bottom:.45em; }
